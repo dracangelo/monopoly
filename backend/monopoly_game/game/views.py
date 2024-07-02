@@ -15,6 +15,20 @@ class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
 
+    @action(detail=True, methods=['post'])
+    def gamble(self, request, pk=None):
+        player = self.get_object()
+        outcome = random.choices(['win', 'lose'], weights=[0.3, 0.7], k=1)[0]
+        amount = random.randint(50, 500)
+        if outcome == 'win':
+            player.balance += amount
+            description = f'Gambling win of ${amount}'
+        else:
+            player.balance -= amount
+            description = f'Gambling loss of ${amount}'
+        player.save()
+        return Response({'outcome': outcome, 'amount': amount})
+
 #property
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
