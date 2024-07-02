@@ -6,7 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models.player import Player
 from .models.property import Property
-from .serializers import PlayerSerializer, PropertySerializer
+from .models.bank import Bank
+from .serializers import PlayerSerializer, PropertySerializer, BankSerializer
 import random
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -17,3 +18,8 @@ class PlayerViewSet(viewsets.ModelViewSet):
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
+
+#bank
+class BankViewSet(viewsets.ModelViewSet):
+    queryset = Bank.objects.all()
+    serializer_class = BankSerializer
