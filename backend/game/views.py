@@ -7,6 +7,19 @@ from game.utils.game_logic import (buy_house, buy_hotel, charge_rent, trade_prop
                                    buy_stock, sell_stock, player_turn, pay_jail_bail, pay_tax,
                                    borrow_from_bank, pay_mortgage)
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
+def send_game_update(message):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'game_updates',
+        {
+            'type': 'send_game_update',
+            'message': message
+        }
+    )
+
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
@@ -17,6 +30,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
         steps = request.data['steps']
         success, message = player_turn(player, steps)
         if success:
+            send_game_update({
+                'type': 'turn_update',
+                'player_id': player.id,
+                'steps': steps,
+                'position': player.position,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -26,6 +45,11 @@ class PlayerViewSet(viewsets.ModelViewSet):
         player = Player.objects.get(id=pk)
         success, message = pay_jail_bail(player)
         if success:
+            send_game_update({
+                'type': 'balance_update',
+                'player_id': player.id,
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -36,6 +60,11 @@ class PlayerViewSet(viewsets.ModelViewSet):
         tax_amount = request.data['tax_amount']
         success, message = pay_tax(player, tax_amount)
         if success:
+            send_game_update({
+                'type': 'balance_update',
+                'player_id': player.id,
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -47,6 +76,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
         property = Property.objects.get(id=property_id)
         success, message = buy_house(player, property)
         if success:
+            send_game_update({
+                'type': 'property_update',
+                'player_id': player.id,
+                'property_id': property.id,
+                'houses': property.houses,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -58,6 +93,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
         property = Property.objects.get(id=property_id)
         success, message = buy_hotel(player, property)
         if success:
+            send_game_update({
+                'type': 'property_update',
+                'player_id': player.id,
+                'property_id': property.id,
+                'hotels': property.hotels,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -70,6 +111,13 @@ class PlayerViewSet(viewsets.ModelViewSet):
         stock = Stock.objects.get(id=stock_id)
         success, message = buy_stock(player, stock, amount)
         if success:
+            send_game_update({
+                'type': 'stock_update',
+                'player_id': player.id,
+                'stock_id': stock.id,
+                'amount': amount,
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -82,6 +130,13 @@ class PlayerViewSet(viewsets.ModelViewSet):
         stock = Stock.objects.get(id=stock_id)
         success, message = sell_stock(player, stock, amount)
         if success:
+            send_game_update({
+                'type': 'stock_update',
+                'player_id': player.id,
+                'stock_id': stock.id,
+                'amount': -amount,  # Negative amount for selling
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -92,6 +147,11 @@ class PlayerViewSet(viewsets.ModelViewSet):
         amount = request.data['amount']
         success, message = borrow_from_bank(player, amount)
         if success:
+            send_game_update({
+                'type': 'balance_update',
+                'player_id': player.id,
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
@@ -103,6 +163,11 @@ class PlayerViewSet(viewsets.ModelViewSet):
         property = Property.objects.get(id=property_id)
         success, message = pay_mortgage(player, property)
         if success:
+            send_game_update({
+                'type': 'balance_update',
+                'player_id': player.id,
+                'balance': player.balance,
+            })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)

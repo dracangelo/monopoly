@@ -41,7 +41,20 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'game',
+    'channels',
 ]
+
+ASGI_APPLICATION = 'monopoly_game.asgi.application'
+
+# Add Redis configuration (assuming using Redis for channel layer)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
