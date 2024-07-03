@@ -5,7 +5,7 @@ class Player(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=1500)
     position = models.IntegerField(default=0)
     in_jail = models.BooleanField(default=False)
-    debt = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # New field for borrowing
+    debt = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.name
