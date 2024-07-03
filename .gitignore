@@ -136,3 +136,15 @@ lerna-debug.log*
 
 # Local configurations
 *.local
+
+#project
+/backend/venv/
+__pycache__/
+/backend/game/__pycache__/
+/frontend/node_modules/
+/frontend/build/
+/backend/game/migrations/
+/.env
+*.pyc
+*.log
+.DS_Store
