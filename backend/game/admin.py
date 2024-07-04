@@ -3,6 +3,8 @@ from game.models.player import Player
 from game.models.property import Property
 from game.models.stock import Stock
 from game.models.bank import Bank
+from game.models.chance_card import ChanceCard
+from game.models.community_chest_card import CommunityChestCard
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
@@ -26,3 +28,6 @@ class StockAdmin(admin.ModelAdmin):
 @admin.register(Bank)
 class BankAdmin(admin.ModelAdmin):
     list_display = ('id', 'balance', 'interest_rate', 'mortgage_rate')
+
+admin.site.register(ChanceCard)
+admin.site.register(CommunityChestCard)

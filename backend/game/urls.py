@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'players', PlayerViewSet)
 router.register(r'properties', PropertyViewSet)
 router.register(r'stocks', StockViewSet)
-router.register(r'bank', BankViewSet)
+router.register(r'banks', BankViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

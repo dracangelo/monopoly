@@ -1,5 +1,11 @@
 import random
 from game.models import Property, Player, Bank, Stock
+from game.models.property import Property
+from game.models.player import Player
+from game.models.bank import Bank
+from game.models.stock import Stock
+from game.models.chance_card import ChanceCard
+from game.models.community_chest_card import CommunityChestCard
 
 def auto_update_balance(player):
     player.save()
@@ -156,3 +162,34 @@ def sell_stock(player, stock, amount):
         auto_update_balance(player)
         return True, f"Sold {amount} shares of {stock.name}."
     return False, "Not enough shares to sell."
+
+
+def draw_chance_card(player):
+    chance = random.choice([True, False])  # 50/50 chance
+    card = random.choice(ChanceCard.objects.all())
+    if chance:
+        apply_card_effect(player, card)
+    else:
+        apply_card_effect(player, card, positive=False)
+    return card.description
+
+def draw_community_chest_card(player):
+    chance = random.choices([True, False], weights=[0.75, 0.25])[0]  # 75/25 chance
+    card = random.choice(CommunityChestCard.objects.all())
+    if chance:
+        apply_card_effect(player, card)
+    else:
+        apply_card_effect(player, card, positive=False)
+    return card.description
+
+def apply_card_effect(player, card, positive=True):
+    effect = card.effect
+    value = card.value if positive else -card.value
+    
+    if effect == "gain_money":
+        player.balance += value
+    elif effect == "lose_money":
+        player.balance -= value
+    # Add other effects as needed
+    
+    player.save()
