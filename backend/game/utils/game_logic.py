@@ -6,6 +6,8 @@ from game.models.bank import Bank
 from game.models.stock import Stock
 from game.models.chance_card import ChanceCard
 from game.models.community_chest_card import CommunityChestCard
+from game.models.board import Board
+from game.models.tile import Tile
 
 def auto_update_balance(player):
     player.save()
@@ -140,11 +142,35 @@ def random_gambling(player):
         return True, f"Player lost ${amount} in gambling."
 
 def player_turn(player, steps):
-    player.position = (player.position + steps) % 40  # Assume 40 squares on the board
+    board = Board.objects.first()
+    new_position = (player.position + steps) % 40  # Assuming a standard 40-tile board
+    tile = Tile.objects.get(position=new_position) 
+
+    player.position = new_position
+    player.save()
+
+    handle_tile(player, tile)
     if player.position == 0:
         return pass_go(player)
     auto_update_balance(player)
-    return True, "Player moved."
+    return True, f"Player moved to {tile.name}"
+
+def handle_tile(player, tile):
+    if tile.tile_type == 'property':
+        # Handle property logic (buy, pay rent, etc.)
+        if tile.property.owner and tile.property.owner != player:
+            charge_rent(player, tile.property)
+        elif not tile.property.owner:
+            # Option to buy the property
+            pass
+    elif tile.tile_type == 'chance':
+        draw_chance_card(player)
+    elif tile.tile_type == 'community_chest':
+        draw_community_chest_card(player)
+    elif tile.tile_type == 'tax':
+        pay_tax(player, 200)  # Example tax amount
+    elif tile.tile_type == 'go':
+        pass_go(player)
 
 def buy_stock(player, stock, amount):
     cost = stock.price * amount
