@@ -86,25 +86,33 @@ def fluctuate_stock_prices():
         stock.save()
 
 def buy_house(player, property):
-    house_cost = 100  # Assume the cost for a house is $100
-    if player.balance >= house_cost and property.owner == player and not property.hotel:
-        property.houses += 1
-        player.balance -= house_cost
-        auto_update_balance(player)
-        property.save()
-        return True, f"Bought a house on {property.name}."
-    return False, "Cannot buy a house on this property."
+    if property.hotel:
+        return False, 'Property already has a hotel'
+    if property.houses >= 4:
+        return False, 'Property already has 4 houses'
+    if player.balance < property.house_cost:  # Assume house_cost is a property attribute
+        return False, 'Not enough balance to buy a house'
+
+    property.houses += 1
+    player.balance -= property.house_cost
+    property.save()
+    player.save()
+    return True, 'House bought successfully'
 
 def buy_hotel(player, property):
-    hotel_cost = 500  # Assume the cost for a hotel is $500
-    if player.balance >= hotel_cost and property.owner == player and property.houses == 4:
-        property.hotel = True
-        property.houses = 0  # Converting houses to a hotel
-        player.balance -= hotel_cost
-        auto_update_balance(player)
-        property.save()
-        return True, f"Bought a hotel on {property.name}."
-    return False, "Cannot buy a hotel on this property."
+    if property.hotel:
+        return False, 'Property already has a hotel'
+    if property.houses < 4:
+        return False, 'Property must have 4 houses to buy a hotel'
+    if player.balance < property.hotel_cost:  # Assume hotel_cost is a property attribute
+        return False, 'Not enough balance to buy a hotel'
+
+    property.houses = 0
+    property.hotel = True
+    player.balance -= property.hotel_cost
+    property.save()
+    player.save()
+    return True, 'Hotel bought successfully'
 
 def trade_properties(player1, player2, property1, property2):
     if property1.owner == player1 and property2.owner == player2:

@@ -97,7 +97,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 'type': 'property_update',
                 'player_id': player.id,
                 'property_id': property.id,
-                'hotels': property.hotels,
+                'hotels': property.hotel,
             })
             return Response({"message": message}, status=status.HTTP_200_OK)
         else:
