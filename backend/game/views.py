@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from game.models import Property, Player, Stock, Bank
-from game.serializers import PlayerSerializer, PropertySerializer, StockSerializer, BankSerializer
+from game.models import Property, Player, Stock, Bank, Board, Space
+from game.serializers import PlayerSerializer, PropertySerializer, StockSerializer, BankSerializer, BoardSerializer
 from game.utils.game_logic import (buy_house, buy_hotel, charge_rent, trade_properties, random_gambling,
                                    buy_stock, sell_stock, player_turn, pay_jail_bail, pay_tax,
                                    borrow_from_bank, pay_mortgage)
@@ -183,3 +183,10 @@ class StockViewSet(viewsets.ModelViewSet):
 class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
+
+class BoardView(generics.RetrieveAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+    def get_object(self):
+        return Board.objects.first()

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from game.models import Player, Property, Stock, Bank
+from game.models import Player, Property, Stock, Bank, Board, Space
 
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,18 @@ class StockSerializer(serializers.ModelSerializer):
 class BankSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bank
+        fields = '__all__'
+
+class SpaceSerializer(serializers.ModelSerializer):
+    property = PropertySerializer()
+
+    class Meta:
+        model = Space
+        fields = '__all__'
+
+class BoardSerializer(serializers.ModelSerializer):
+    spaces = SpaceSerializer(many=True)
+
+    class Meta:
+        model = Board
         fields = '__all__'
