@@ -1,13 +1,6 @@
 import random
-from game.models import Property, Player, Bank, Stock
-from game.models.property import Property
-from game.models.player import Player
-from game.models.bank import Bank
-from game.models.stock import Stock
-from game.models.chance_card import ChanceCard
-from game.models.community_chest_card import CommunityChestCard
-from game.models.board import Board
-from game.models.tile import Tile
+from django.db import transaction
+from game.models import Property, Player, Bank, Stock, ChanceCard, CommunityChestCard, Tile, Board, Space
 
 def auto_update_balance(player):
     player.save()
@@ -144,33 +137,97 @@ def random_gambling(player):
 def player_turn(player, steps):
     board = Board.objects.first()
     new_position = (player.position + steps) % 40  # Assuming a standard 40-tile board
-    tile = Tile.objects.get(position=new_position) 
+    space = Space.objects.get(board=board, position=new_position)
 
     player.position = new_position
     player.save()
 
-    handle_tile(player, tile)
+    handle_tile(player, space)
     if player.position == 0:
         return pass_go(player)
     auto_update_balance(player)
-    return True, f"Player moved to {tile.name}"
+    return True, f"Player moved to {space.name}"
 
-def handle_tile(player, tile):
-    if tile.tile_type == 'property':
-        # Handle property logic (buy, pay rent, etc.)
-        if tile.property.owner and tile.property.owner != player:
-            charge_rent(player, tile.property)
-        elif not tile.property.owner:
-            # Option to buy the property
-            pass
-    elif tile.tile_type == 'chance':
+def handle_tile(player, space):
+    if space.space_type == 'GO':
+        # Player landed on GO, handle pass_go in player_turn
+        pass
+    elif space.space_type == 'PROPERTY':
+        property = space.property
+        # Handle property logic (e.g., buy, pay rent, etc.)
+        handle_property(player, property)
+    elif space.space_type == 'CHANCE':
         draw_chance_card(player)
-    elif tile.tile_type == 'community_chest':
+    elif space.space_type == 'COMMUNITY_CHEST':
         draw_community_chest_card(player)
-    elif tile.tile_type == 'tax':
-        pay_tax(player, 200)  # Example tax amount
-    elif tile.tile_type == 'go':
-        pass_go(player)
+    elif space.space_type == 'TAX':
+        handle_tax(player, space)
+    elif space.space_type == 'JAIL':
+        handle_jail(player)
+    elif space.space_type == 'FREE_PARKING':
+        handle_free_parking(player)
+    elif space.space_type == 'GO_TO_JAIL':
+        send_player_to_jail(player)
+    elif space.space_type == 'UTILITY' or space.space_type == 'RAILROAD':
+        handle_utility_or_railroad(player, space)
+
+def handle_property(player, property):
+    if property.owner is None:
+        # Player can buy the property
+        pass
+    elif property.owner != player:
+        # Player must pay rent
+        charge_rent(player, property)
+    
+def draw_chance_card(player):
+    chance = random.choice([True, False])  # 50/50 chance
+    card = random.choice(ChanceCard.objects.all())
+    apply_card_effect(player, card, positive=chance)
+    return card.description
+
+def draw_community_chest_card(player):
+    chance = random.choices([True, False], weights=[0.75, 0.25])[0]  # 75/25 chance
+    card = random.choice(CommunityChestCard.objects.all())
+    apply_card_effect(player, card, positive=chance)
+    return card.description
+
+def apply_card_effect(player, card, positive=True):
+    effect = card.effect
+    value = card.value if positive else -card.value
+    
+    if effect == "gain_money":
+        player.balance += value
+    elif effect == "lose_money":
+        player.balance -= value
+    # Add other effects as needed
+    
+    player.save()
+
+def handle_tax(player, space):
+    tax_amount = 200  # Assume a standard tax amount or fetch from the space details
+    pay_tax(player, tax_amount)
+
+def handle_jail(player):
+    player.in_jail = True
+    player.save()
+
+def handle_free_parking(player):
+    # Typically, nothing happens here
+    pass
+
+def send_player_to_jail(player):
+    player.position = 10  # Jail position
+    player.in_jail = True
+    player.save()
+
+def handle_utility_or_railroad(player, space):
+    property = space.property
+    if property.owner is None:
+        # Player can buy the property
+        pass
+    elif property.owner != player:
+        # Player must pay rent
+        charge_rent(player, property)
 
 def buy_stock(player, stock, amount):
     cost = stock.price * amount
@@ -188,34 +245,3 @@ def sell_stock(player, stock, amount):
         auto_update_balance(player)
         return True, f"Sold {amount} shares of {stock.name}."
     return False, "Not enough shares to sell."
-
-
-def draw_chance_card(player):
-    chance = random.choice([True, False])  # 50/50 chance
-    card = random.choice(ChanceCard.objects.all())
-    if chance:
-        apply_card_effect(player, card)
-    else:
-        apply_card_effect(player, card, positive=False)
-    return card.description
-
-def draw_community_chest_card(player):
-    chance = random.choices([True, False], weights=[0.75, 0.25])[0]  # 75/25 chance
-    card = random.choice(CommunityChestCard.objects.all())
-    if chance:
-        apply_card_effect(player, card)
-    else:
-        apply_card_effect(player, card, positive=False)
-    return card.description
-
-def apply_card_effect(player, card, positive=True):
-    effect = card.effect
-    value = card.value if positive else -card.value
-    
-    if effect == "gain_money":
-        player.balance += value
-    elif effect == "lose_money":
-        player.balance -= value
-    # Add other effects as needed
-    
-    player.save()
