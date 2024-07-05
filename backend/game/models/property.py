@@ -13,7 +13,7 @@ class Property(models.Model):
         ('Dark Blue', 'Dark Blue'),
     ]
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     value = models.DecimalField(max_digits=10, decimal_places=2)
     rent = models.DecimalField(max_digits=10, decimal_places=2)
     owner = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, blank=True)

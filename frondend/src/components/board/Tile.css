@@ -1,0 +1,30 @@
+.tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #000;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.corner {
+    background-color: #f0e68c;
+}
+
+.property {
+    background-color: #ffa07a;
+}
+
+.chest {
+    background-color: #add8e6;
+}
+
+.tax {
+    background-color: #f08080;
+}
+
+.railroad {
+    background-color: #d3d3d3;
+}

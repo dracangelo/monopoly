@@ -1,10 +1,21 @@
 from django.db import models
+from .property import Property
 
 class Tile(models.Model):
-    name = models.CharField(max_length=255)
-    position = models.IntegerField(unique=True)  # Position on the board (0-39 for standard Monopoly)
-    tile_type = models.CharField(max_length=50)  # e.g., 'property', 'chance', 'community_chest', 'go', etc.
-    property = models.OneToOneField('Property', null=True, blank=True, on_delete=models.SET_NULL)  # Only for property tiles
+    TILE_TYPE_CHOICES = [
+        ('go', 'GO'),
+        ('property', 'Property'),
+        ('community_chest', 'Community Chest'),
+        ('chance', 'Chance'),
+        ('tax', 'Tax'),
+        ('corner', 'Corner'),
+        ('special', 'Special'),
+    ]
+
+    position = models.IntegerField(unique=True)
+    name = models.CharField(max_length=100)
+    tile_type = models.CharField(max_length=20, choices=TILE_TYPE_CHOICES)
+    property = models.ForeignKey(Property, null=True, blank=True, on_delete=models.SET_NULL, related_name='tiles')
 
     def __str__(self):
-        return f"{self.position}: {self.name} ({self.tile_type})"
+        return f"{self.name} ({self.position})"

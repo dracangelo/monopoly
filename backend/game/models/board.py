@@ -1,4 +1,5 @@
 from django.db import models
+from game.models.property import Property
 
 class Board(models.Model):
     name = models.CharField(max_length=255)
@@ -24,7 +25,7 @@ class Space(models.Model):
     position = models.PositiveIntegerField()  # Position on the board
     space_type = models.CharField(max_length=20, choices=SPACE_TYPES)
     name = models.CharField(max_length=255, blank=True, null=True)
-    property = models.ForeignKey('Property', on_delete=models.CASCADE, blank=True, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
