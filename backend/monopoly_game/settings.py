@@ -69,9 +69,12 @@ MIDDLEWARE = [
 
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for development
+# For production, specify allowed origins like:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://yourdomain.com",
+# ]
 
 ROOT_URLCONF = 'monopoly_game.urls'
 
