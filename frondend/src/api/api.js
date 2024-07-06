@@ -3,9 +3,15 @@ import config from './config';
 
 // Create an axios instance
 const api = axios.create({
-    baseURL: config.apiBaseUrl,  // Using config to set the base URL
-    timeout: 5000,  // You can adjust the timeout as necessary
+    baseURL: config.apiBaseUrl,  // Use the base URL from config
+    timeout: 5000,  // Adjust the timeout as necessary
 });
+
+// Function to fetch the board
+export const fetchBoard = async () => {
+    const response = await api.get('/board/');
+    return response.data;
+};
 // Function to fetch players
 export const fetchPlayers = async () => {
     const response = await api.get('/players/');

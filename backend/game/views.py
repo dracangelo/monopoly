@@ -184,12 +184,11 @@ class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
 
-class BoardViewSet(viewsets.ModelViewSet):
+class BoardView(generics.RetrieveAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
 
     def get_object(self):
-        return Board.objects.first()
-
-    def get_object(self):
-        return Board.objects.first()
+        board = Board.objects.prefetch_related('spaces').first()
+        print('Board data:', board)  # Log the board data for debugging
+        return board

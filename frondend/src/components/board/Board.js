@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Tile from './Tile';
-import api from '../../api/api'; // Make sure this path is correct for your file structure
+import api from '../../api/api';
 import './Board.css';
 
 const Board = () => {
@@ -11,12 +11,13 @@ const Board = () => {
         const fetchTiles = async () => {
             try {
                 const response = await api.get('/board/');
-                if (response.status !== 200) {
-                    throw new Error(`Error: ${response.status}`);
+                console.log('API response:', response);  // Log response for debugging
+                if (response.data && response.data.spaces) {
+                    setTiles(response.data.spaces);
+                } else {
+                    setError('No spaces data found');
                 }
-                setTiles(response.data[0].spaces); // Access the first board's spaces
             } catch (error) {
-                console.error('Fetch error:', error); // Debugging log
                 setError(error.message);
             }
         };
@@ -30,9 +31,13 @@ const Board = () => {
 
     return (
         <div className="board">
-            {tiles.map((tile, index) => (
-                <Tile key={index} {...tile} />
-            ))}
+            {tiles.length > 0 ? (
+                tiles.map((tile, index) => (
+                    <Tile key={index} {...tile} />
+                ))
+            ) : (
+                <div>No tiles to display</div>
+            )}
         </div>
     );
 };
