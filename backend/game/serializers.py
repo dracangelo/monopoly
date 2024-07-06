@@ -29,7 +29,7 @@ class SpaceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BoardSerializer(serializers.ModelSerializer):
-    spaces = SpaceSerializer(many=True)
+    spaces = SpaceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Board

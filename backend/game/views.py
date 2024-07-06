@@ -184,9 +184,12 @@ class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
 
-class BoardView(generics.RetrieveAPIView):
+class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+
+    def get_object(self):
+        return Board.objects.first()
 
     def get_object(self):
         return Board.objects.first()

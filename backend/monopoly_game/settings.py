@@ -69,12 +69,10 @@ MIDDLEWARE = [
 
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for development
-# For production, specify allowed origins like:
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "https://yourdomain.com",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React frontend URL
+    # Add other origins if needed
+]
 
 ROOT_URLCONF = 'monopoly_game.urls'
 

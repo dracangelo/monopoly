@@ -1,11 +1,11 @@
 import axios from 'axios';
+import config from './config';
 
 // Create an axios instance
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api',  // Adjust the base URL as needed
+    baseURL: config.apiBaseUrl,  // Using config to set the base URL
     timeout: 5000,  // You can adjust the timeout as necessary
 });
-
 // Function to fetch players
 export const fetchPlayers = async () => {
     const response = await api.get('/players/');
