@@ -7,32 +7,49 @@
     padding: 10px;
     font-size: 1.2em;
     text-align: center;
+    position: relative;
+    cursor: pointer;
+    background-color: white;
 }
 
-.corner {
+.tile .tile-position {
+    font-size: 0.8em;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.tile .tile-name {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Specific styles for different tile types */
+.tile.corner {
     background-color: #f0e68c;
 }
 
-.property {
+.tile.property {
     background-color: #ffa07a;
 }
 
-.chest {
+.tile.chest {
     background-color: #add8e6;
 }
 
-.tax {
+.tile.tax {
     background-color: #f08080;
 }
 
-.railroad {
+.tile.railroad {
     background-color: #d3d3d3;
 }
 
-.utility {
+.tile.utility {
     background-color: #ffeb3b;
 }
 
-.chance {
+.tile.chance {
     background-color: #ff5722;
 }

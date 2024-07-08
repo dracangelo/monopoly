@@ -1,0 +1,47 @@
+.title-deed {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+
+.title-deed-name {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.title-deed div {
+    margin: 5px 0;
+}
+
+
+.title-deed-header {
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.title-deed-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.title-deed-body {
+    padding: 10px;
+}
+
+.title-deed-body p {
+    margin: 5px 0;
+}
+
+.brown { background-color: #964B00; color: #fff; }
+.light-blue { background-color: #ADD8E6; color: #000; }
+.pink { background-color: #FFC0CB; color: #000; }
+.orange { background-color: #FFA500; color: #000; }
+.red { background-color: #FF0000; color: #fff; }
+.yellow { background-color: #FFFF00; color: #000; }
+.green { background-color: #008000; color: #fff; }
+.dark-blue { background-color: #00008B; color: #fff; }
