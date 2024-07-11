@@ -10,6 +10,8 @@ class Tile(models.Model):
         ('tax', 'Tax'),
         ('corner', 'Corner'),
         ('special', 'Special'),
+        ('casino', 'Casino'),
+        ('stocks', 'Stocks'),
     ]
 
     position = models.IntegerField(unique=True)

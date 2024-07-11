@@ -11,6 +11,6 @@ router.register(r'banks', BankViewSet)
 
 # Define the URL patterns
 urlpatterns = [
-    path('', include(router.urls)),  # Include the router's URLs
-    path('board/', BoardView.as_view(), name='board'),  # Add the board view
+    path('', include(router.urls)),  
+    path('board/', BoardView.as_view(), name='board'),  
 ]

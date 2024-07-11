@@ -1,57 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tile from './Tile';
-import TitleDeed from './TitleDeed';
-import api from '../../api/api';
 import './Board.css';
+import { fetchBoard } from '../../api/api';
 
 const Board = () => {
-    const [tiles, setTiles] = useState([]);
-    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [boardTiles, setBoardTiles] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchTiles = async () => {
+        const getBoardData = async () => {
             try {
-                const response = await api.get('/board/');
-                console.log('API response:', response);  // Log response for debugging
-                if (response.data && response.data.spaces) {
-                    setTiles(response.data.spaces);
+                const data = await fetchBoard();
+                console.log('Fetched board data:', data);
+
+                if (data && Array.isArray(data)) {
+                    setBoardTiles(data);
                 } else {
-                    setError('No spaces data found');
+                    setError('Board data is not in the expected format');
+                    console.error('Board data is not an array:', data);
                 }
             } catch (error) {
-                setError(error.message);
+                setError('Error fetching board data');
+                console.error('Error fetching board data:', error);
             }
         };
 
-        fetchTiles();
+        getBoardData();
     }, []);
 
-    const handleTileClick = (tile) => {
-        if (tile.property) {
-            setSelectedProperty(tile.property);
-        }
-    };
-
     if (error) {
-        return <div>Error fetching tiles: {error}</div>;
+        return <div>{error}</div>;
     }
 
     return (
-        <div className="board-container">
-            <div className="board">
-                {tiles.length > 0 ? (
-                    tiles.map((tile, index) => (
-                        <Tile key={index} {...tile} onClick={() => handleTileClick(tile)} />
-                    ))
-                ) : (
-                    <div>No tiles to display</div>
-                )}
-            </div>
-            {selectedProperty && (
-                <div className="title-deed-container">
-                    <TitleDeed {...selectedProperty} />
-                </div>
+        <div className="board">
+            {boardTiles.length > 0 ? (
+                boardTiles.map((tile, index) => (
+                    <Tile key={index} {...tile} />
+                ))
+            ) : (
+                <div>No tiles to display</div>
             )}
         </div>
     );

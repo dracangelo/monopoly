@@ -9,7 +9,7 @@ class Command(BaseCommand):
         spaces_data = [
             {"position": 0, "name": "GO", "space_type": "GO"},
             {"position": 1, "name": "Mediterranean Avenue", "space_type": "PROPERTY", "property_name": "Mediterranean Avenue"},
-            {"position": 40, "name": "Gambling", "space_type": "UTILITY"},
+            {"position": 2, "name": "Community Chest", "space_type": "COMMUNITY_CHEST"},
             {"position": 3, "name": "Baltic Avenue", "space_type": "PROPERTY", "property_name": "Baltic Avenue"},
             {"position": 4, "name": "Income Tax", "space_type": "TAX"},
             {"position": 5, "name": "Reading Railroad", "space_type": "RAILROAD"},
@@ -29,7 +29,7 @@ class Command(BaseCommand):
             {"position": 19, "name": "New York Avenue", "space_type": "PROPERTY", "property_name": "New York Avenue"},
             {"position": 20, "name": "Free Parking", "space_type": "FREE_PARKING"},
             {"position": 21, "name": "Kentucky Avenue", "space_type": "PROPERTY", "property_name": "Kentucky Avenue"},
-            {"position": 41, "name": "Trade", "space_type": "UTILITY"},
+            {"position": 22, "name": "Chance", "space_type": "CHANCE"},
             {"position": 23, "name": "Indiana Avenue", "space_type": "PROPERTY", "property_name": "Indiana Avenue"},
             {"position": 24, "name": "Illinois Avenue", "space_type": "PROPERTY", "property_name": "Illinois Avenue"},
             {"position": 25, "name": "B. & O. Railroad", "space_type": "RAILROAD"},

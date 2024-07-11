@@ -1,5 +1,5 @@
 const config = {
-    apiBaseUrl: 'http://localhost:8000/api'  // Set your base URL here
+    apiBaseUrl: 'http://localhost:8000'  // Django server's address
 };
 
 export default config;

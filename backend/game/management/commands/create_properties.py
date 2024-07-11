@@ -41,45 +41,38 @@ class Command(BaseCommand):
                     "color_group": property_data["color_group"]
                 }
             )
-            Tile.objects.get_or_create(
-                name=property_data["name"],
+            tile, created = Tile.objects.get_or_create(
                 position=property_data["position"],
-                tile_type='property',
-                defaults={'property': property_obj}
+                defaults={
+                    "name": property_data["name"],
+                    "tile_type": 'property',
+                    "property": property_obj
+                }
             )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f'Property "{property_data["name"]}" created successfully'))
-            else:
-                self.stdout.write(self.style.WARNING(f'Property "{property_data["name"]}" already exists'))
+            if not created:
+                tile.property = property_obj
+                tile.save()
 
         special_tiles_data = [
             {"name": "GO", "position": 0, "tile_type": "corner"},
-            {"name": "Jail", "position": 10, "tile_type": "corner"},
+            {"name": "Income Tax", "position": 4, "tile_type": "tax"},
+            {"name": "Casino", "position": 2, "tile_type": "casino"},
+            {"name": "Reading Railroad", "position": 5, "tile_type": "property"},
+            {"name": "Chance", "position": 7, "tile_type": "chance"},
+            {"name": "Jail / Just Visiting", "position": 10, "tile_type": "corner"},
             {"name": "Free Parking", "position": 20, "tile_type": "corner"},
             {"name": "Go To Jail", "position": 30, "tile_type": "corner"},
-            {"name": "Electric Company", "position": 12, "tile_type": "special"},
-            {"name": "Water Works", "position": 28, "tile_type": "special"},
-            {"name": "Income Tax", "position": 4, "tile_type": "special"},
-            {"name": "Luxury Tax", "position": 38, "tile_type": "special"},
-            {"name": "Chance 1", "position": 7, "tile_type": "special"},
-            {"name": "Chance 2", "position": 22, "tile_type": "special"},
-            {"name": "Chance 3", "position": 36, "tile_type": "special"},
-            {"name": "Community Chest 1", "position": 2, "tile_type": "special"},
-            {"name": "Community Chest 2", "position": 17, "tile_type": "special"},
-            {"name": "Community Chest 3", "position": 33, "tile_type": "special"},
-            {"name": "Reading Railroad", "position": 5, "tile_type": "special"},
-            {"name": "Pennsylvania Railroad", "position": 15, "tile_type": "special"},
-            {"name": "B. & O. Railroad", "position": 25, "tile_type": "special"},
-            {"name": "Short Line", "position": 35, "tile_type": "special"},
-            {"name": "Gambling", "position": 40, "tile_type": "special"},
-            {"name": "Trade", "position": 41, "tile_type": "special"},
-            {"name": "WiFi", "position": 42, "tile_type": "special"},
+            {"name": "Short Line", "position": 35, "tile_type": "property"},
+            {"name": "Luxury Tax", "position": 38, "tile_type": "tax"},
+            {"name": "Stocks", "position": 33, "tile_type": "stocks"},
+            {"name": "Trade", "position": 12, "tile_type": "trade"}
         ]
 
         for tile_data in special_tiles_data:
-            Tile.objects.get_or_create(
-                name=tile_data["name"],
+            tile, created = Tile.objects.get_or_create(
                 position=tile_data["position"],
-                tile_type=tile_data["tile_type"],
+                defaults={
+                    "name": tile_data["name"],
+                    "tile_type": tile_data["tile_type"],
+                }
             )
-            self.stdout.write(self.style.SUCCESS(f'Tile "{tile_data["name"]}" created successfully'))

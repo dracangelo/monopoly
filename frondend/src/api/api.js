@@ -1,3 +1,4 @@
+// api.js
 import axios from 'axios';
 import config from './config';
 
@@ -9,25 +10,47 @@ const api = axios.create({
 
 // Function to fetch the board
 export const fetchBoard = async () => {
-    const response = await api.get('/board/');
-    return response.data;
+    try {
+        const response = await api.get('/api/board/');
+        return response.data;
+    } catch (error) {
+        console.error('Fetch board data error:', error);
+        throw error;
+    }
 };
+
+
 // Function to fetch players
 export const fetchPlayers = async () => {
-    const response = await api.get('/players/');
-    return response.data;
+    try {
+        const response = await api.get('/players/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching player data:', error);
+        throw error;
+    }
 };
 
 // Function to propose a trade
 export const proposeTrade = async (tradeDetails) => {
-    const response = await api.post('/trades/propose/', tradeDetails);
-    return response.data;
+    try {
+        const response = await api.post('/trades/propose/', tradeDetails);
+        return response.data;
+    } catch (error) {
+        console.error('Error proposing trade:', error);
+        throw error;
+    }
 };
 
 // Function to accept a trade
 export const acceptTrade = async (tradeId) => {
-    const response = await api.post(`/trades/${tradeId}/accept/`);
-    return response.data;
+    try {
+        const response = await api.post(`/trades/${tradeId}/accept/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error accepting trade:', error);
+        throw error;
+    }
 };
 
 // Export the configured axios instance for direct use in components

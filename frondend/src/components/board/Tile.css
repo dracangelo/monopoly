@@ -1,55 +1,57 @@
 .tile {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 2px solid #000;
     border-radius: 5px;
     padding: 10px;
-    font-size: 1.2em;
+    font-size: 0.8em;
     text-align: center;
     position: relative;
-    cursor: pointer;
     background-color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .tile .tile-position {
-    font-size: 0.8em;
     position: absolute;
     top: 5px;
     left: 5px;
+    font-size: 0.7em;
+    color: gray;
 }
 
 .tile .tile-name {
-    font-size: 1em;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin: 10px 0;
 }
 
-/* Specific styles for different tile types */
-.tile.corner {
-    background-color: #f0e68c;
+.tile .tile-property {
+    margin-top: 10px;
+    font-size: 0.7em;
+    text-align: left;
 }
 
-.tile.property {
-    background-color: #ffa07a;
+.tile .tile-property .property-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-top: 5px;
 }
 
-.tile.chest {
-    background-color: #add8e6;
-}
+.property-color.brown { background-color: #8B4513; }
+.property-color['light-blue'] { background-color: #ADD8E6; }
+.property-color.pink { background-color: #FFC0CB; }
+.property-color.orange { background-color: #FFA500; }
+.property-color.red { background-color: #FF0000; }
+.property-color.yellow { background-color: #FFFF00; }
+.property-color.green { background-color: #008000; }
+.property-color['dark-blue'] { background-color: #00008B; }
 
-.tile.tax {
-    background-color: #f08080;
-}
-
-.tile.railroad {
-    background-color: #d3d3d3;
-}
-
-.tile.utility {
-    background-color: #ffeb3b;
-}
-
-.tile.chance {
-    background-color: #ff5722;
-}
+.corner { background-color: #f0e68c; }
+.property { background-color: #ffa07a; }
+.chest { background-color: #add8e6; }
+.tax { background-color: #f08080; }
+.railroad { background-color: #d3d3d3; }
+.utility { background-color: #ffeb3b; }
+.chance { background-color: #ff5722; }
