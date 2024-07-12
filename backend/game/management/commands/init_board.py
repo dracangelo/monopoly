@@ -1,15 +1,14 @@
 from django.core.management.base import BaseCommand
-from game.models.property import Property
-from game.models.board import Board, Space
+from game.models import Board, Space, Property
 
 class Command(BaseCommand):
-    help = 'Initialize the Monopoly board'
+    help = 'Initialize the Monopoly board with spaces and properties'
 
     def handle(self, *args, **kwargs):
         spaces_data = [
             {"position": 0, "name": "GO", "space_type": "GO"},
             {"position": 1, "name": "Mediterranean Avenue", "space_type": "PROPERTY", "property_name": "Mediterranean Avenue"},
-            {"position": 2, "name": "Community Chest", "space_type": "COMMUNITY_CHEST"},
+            {"position": 2, "name": "Casino", "space_type": "CASINO"},
             {"position": 3, "name": "Baltic Avenue", "space_type": "PROPERTY", "property_name": "Baltic Avenue"},
             {"position": 4, "name": "Income Tax", "space_type": "TAX"},
             {"position": 5, "name": "Reading Railroad", "space_type": "RAILROAD"},
@@ -19,7 +18,7 @@ class Command(BaseCommand):
             {"position": 9, "name": "Connecticut Avenue", "space_type": "PROPERTY", "property_name": "Connecticut Avenue"},
             {"position": 10, "name": "Jail", "space_type": "JAIL"},
             {"position": 11, "name": "St. Charles Place", "space_type": "PROPERTY", "property_name": "St. Charles Place"},
-            {"position": 12, "name": "Electric Company", "space_type": "UTILITY"},
+            {"position": 12, "name": "Trade", "space_type": "TRADE"},
             {"position": 13, "name": "States Avenue", "space_type": "PROPERTY", "property_name": "States Avenue"},
             {"position": 14, "name": "Virginia Avenue", "space_type": "PROPERTY", "property_name": "Virginia Avenue"},
             {"position": 15, "name": "Pennsylvania Railroad", "space_type": "RAILROAD"},
@@ -49,20 +48,28 @@ class Command(BaseCommand):
             {"position": 39, "name": "Boardwalk", "space_type": "PROPERTY", "property_name": "Boardwalk"},
         ]
 
-        board = Board.objects.create(name='Default Board')
+        board, created = Board.objects.get_or_create(name='Monopoly Board')
+        if not created:
+            self.stdout.write(self.style.WARNING('Board already exists. Skipping creation.'))
+            return
 
         for space_data in spaces_data:
-            property_instance = None
-            if space_data.get('space_type') == 'PROPERTY':
-                property_instance = Property.objects.get(name=space_data['property_name'])
-            space, created = Space.objects.update_or_create(
-                position=space_data['position'],
-                defaults={
-                    'name': space_data['name'],
-                    'space_type': space_data['space_type'],
-                    'property': property_instance,
-                    'board': board
-                }
-            )
+            if space_data["space_type"] == "PROPERTY":
+                property, created = Property.objects.get_or_create(name=space_data["property_name"])
+                space = Space(
+                    board=board,
+                    position=space_data["position"],
+                    name=space_data["name"],
+                    space_type=space_data["space_type"],
+                    property=property
+                )
+            else:
+                space = Space(
+                    board=board,
+                    position=space_data["position"],
+                    name=space_data["name"],
+                    space_type=space_data["space_type"]
+                )
+            space.save()
 
-        self.stdout.write(self.style.SUCCESS('Board initialized successfully'))
+        self.stdout.write(self.style.SUCCESS('Successfully initialized the Monopoly board.'))

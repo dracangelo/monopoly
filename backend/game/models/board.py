@@ -18,7 +18,9 @@ class Space(models.Model):
         ('FREE_PARKING', 'Free Parking'),
         ('GO_TO_JAIL', 'Go to Jail'),
         ('UTILITY', 'Utility'),
-        ('RAILROAD', 'Railroad')
+        ('RAILROAD', 'Railroad'),
+        ('CASINO', 'Casino'),
+        ('TRADE', 'Trade'),
     ]
 
     board = models.ForeignKey(Board, related_name='spaces', on_delete=models.CASCADE)
