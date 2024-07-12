@@ -1,6 +1,7 @@
 import random
 from django.db import transaction
 from game.models import Property, Player, Bank, Stock, ChanceCard, CommunityChestCard, Tile, Board, Space
+from game.utils.trading_rules import propose_trade
 
 def auto_update_balance(player):
     player.save()
@@ -116,13 +117,11 @@ def buy_hotel(player, property):
     return True, 'Hotel bought successfully'
 
 def trade_properties(player1, player2, property1, property2):
-    if property1.owner == player1 and property2.owner == player2:
-        property1.owner = player2
-        property2.owner = player1
-        property1.save()
-        property2.save()
-        return True, "Properties traded successfully."
-    return False, "Cannot trade these properties."
+    """
+    Facilitate property trading between two players.
+    """
+    success, message = propose_trade(player1, player2, property1, property2)
+    return success, message
 
 def random_gambling(player):
     gambling_outcome = random.choice(["win", "lose"])

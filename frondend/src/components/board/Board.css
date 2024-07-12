@@ -40,23 +40,25 @@
 /* Top row */
 .tile:nth-child(n+2):nth-child(-n+10) {
     grid-column: span 1;
-    grid-row: 1 / 3;
+    grid-row: 1 / span 2;
 }
 
 /* Right column */
 .tile:nth-child(11n) {
-    grid-column: 10 / 12;
+    grid-row: span 1;
+    grid-column: 10 / span 2;
 }
 
 /* Bottom row */
 .tile:nth-child(n+22):nth-child(-n+30) {
     grid-column: span 1;
-    grid-row: 10 / 12;
+    grid-row: 10 / span 2;
 }
 
 /* Left column */
 .tile:nth-child(11n+1):not(:first-child):not(:nth-child(11)):not(:nth-child(21)):not(:nth-child(31)) {
-    grid-column: 1 / 3;
+    grid-row: span 1;
+    grid-column: 1 / span 2;
 }
 
 /* Property colors */
