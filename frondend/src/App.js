@@ -6,12 +6,14 @@ import PropertyCard from './components/PropertyCard';
 import BankDashboard from './components/BankDashboard';
 import StockMarket from './components/StockMarket';
 import Board from './components/board/Board';
+import DiceRoller from './components/Dice/DiceRoller';
 
 function App() {
     return (
         <Router>
             <div className="App">
                 <Board />
+                <DiceRoller />
                 <Routes>
                     <Route path="/players" element={<PlayerDashboard />} />
                     <Route path="/properties" element={<PropertyCard />} />

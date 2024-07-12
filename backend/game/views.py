@@ -11,6 +11,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse
+import random
 
 def send_game_update(message):
     channel_layer = get_channel_layer()
@@ -174,6 +175,19 @@ class PlayerViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
 
+def roll_dice(request):
+    if request.method == 'GET':
+        dice_1 = random.randint(1, 6)
+        dice_2 = random.randint(1, 6)
+        result = {
+            'dice_1': dice_1,
+            'dice_2': dice_2,
+            'total': dice_1 + dice_2
+        }
+        return JsonResponse(result)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer

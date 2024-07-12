@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from game.views import PlayerViewSet, PropertyViewSet, StockViewSet, BankViewSet, BoardView
+from .views import roll_dice
 
 # Create a router and register the viewsets
 router = DefaultRouter()
@@ -12,5 +13,6 @@ router.register(r'banks', BankViewSet)
 # Define the URL patterns
 urlpatterns = [
     path('', include(router.urls)),  
-    path('board/', BoardView.as_view(), name='board'),  
+    path('board/', BoardView.as_view(), name='board'),
+    path('roll_dice/', roll_dice, name='roll_dice'),  
 ]
