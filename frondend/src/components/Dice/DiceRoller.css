@@ -1,37 +1,22 @@
+/* DiceRoller.css */
 .dice-roller {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    text-align: center;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
 }
 
 .dice {
     display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
 }
 
 .dice-face {
     width: 50px;
     height: 50px;
-    margin: 0 5px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     border: 1px solid #000;
-    border-radius: 5px;
-    font-size: 24px;
-    background-color: #f0f0f0;
-}
-
-button {
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.total {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
+    margin: 5px;
+    font-size: 20px;
 }

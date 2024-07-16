@@ -1,0 +1,18 @@
+/* frontend/src/components/board/PlayerIcon.css */
+
+.player-icon {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+}
+
+/* Additional styling for different players */
+.player-1 { background-color: red; }
+.player-2 { background-color: blue; }
+.player-3 { background-color: green; }
+.player-4 { background-color: yellow; }
+.player-5 { background-color: purple; }
+.player-6 { background-color: orange; }

@@ -1,13 +1,13 @@
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import viewsets, status 
+from rest_framework.decorators import action 
+from rest_framework.response import Response 
 from game.models import Property, Player, Stock, Bank, Tile
 from game.serializers import PlayerSerializer, PropertySerializer, StockSerializer, BankSerializer, BoardSerializer, TileSerializer
 from game.utils.game_logic import (buy_house, buy_hotel, charge_rent, trade_properties, random_gambling,
                                    buy_stock, sell_stock, player_turn, pay_jail_bail, pay_tax,
                                    borrow_from_bank, pay_mortgage)
-from rest_framework.views import APIView
-from asgiref.sync import async_to_sync
+from rest_framework.views import APIView 
+from asgiref.sync import async_to_sync 
 from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse

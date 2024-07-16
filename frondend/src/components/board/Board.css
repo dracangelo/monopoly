@@ -1,4 +1,9 @@
-/* board.css */
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
 
 .board {
     display: grid;
@@ -7,9 +12,8 @@
     width: 100%;
     max-width: 800px;
     aspect-ratio: 1 / 1;
-    margin: 0 auto;
     border: 2px solid #000;
-    background-color: #C1E1C1;  /* Light green background */
+    background-color: #C1E1C1;
 }
 
 .tile {
@@ -20,67 +24,69 @@
     align-items: center;
     text-align: center;
     padding: 5px;
-    font-size: 0.8vw;
-    transition: transform 0.3s ease;
-}
-
-.tile:hover {
-    transform: scale(1.05);
-    z-index: 1;
+    font-size: 0.7vw;
 }
 
 /* Corner tiles */
-.tile:nth-child(1),
-.tile:nth-child(11),
-.tile:nth-child(21),
-.tile:nth-child(31) {
-    grid-column: span 2;
-    grid-row: span 2;
-    background-color: #f0f0f0;
+.tile-0 { /* GO */
+    grid-area: 1 / 1 / span 1 / span 1;
+}
+.tile-10 { /* Jail */
+    grid-area: 1 / 11 / span 1 / span 1;
+}
+.tile-20 { /* Free Parking */
+    grid-area: 11 / 11 / span 1 / span 1;
+}
+.tile-30 { /* Go To Jail */
+    grid-area: 11 / 1 / span 1 / span 1;
 }
 
 /* Top row */
-.tile:nth-child(n+2):nth-child(-n+10) {
-    grid-column: span 1;
-    grid-row: 1 / 3;
-}
+.tile-1 { grid-area: 1 / 2 / span 1 / span 1; }
+.tile-2 { grid-area: 1 / 3 / span 1 / span 1; }
+.tile-3 { grid-area: 1 / 4 / span 1 / span 1; }
+.tile-4 { grid-area: 1 / 5 / span 1 / span 1; }
+.tile-5 { grid-area: 1 / 6 / span 1 / span 1; }
+.tile-6 { grid-area: 1 / 7 / span 1 / span 1; }
+.tile-7 { grid-area: 1 / 8 / span 1 / span 1; }
+.tile-8 { grid-area: 1 / 9 / span 1 / span 1; }
+.tile-9 { grid-area: 1 / 10 / span 1 / span 1; }
 
 /* Right column */
-.tile:nth-child(11n) {
-    grid-column: 10 / 12;
-}
+.tile-11 { grid-area: 2 / 11 / span 1 / span 1; }
+.tile-12 { grid-area: 3 / 11 / span 1 / span 1; }
+.tile-13 { grid-area: 4 / 11 / span 1 / span 1; }
+.tile-14 { grid-area: 5 / 11 / span 1 / span 1; }
+.tile-15 { grid-area: 6 / 11 / span 1 / span 1; }
+.tile-16 { grid-area: 7 / 11 / span 1 / span 1; }
+.tile-17 { grid-area: 8 / 11 / span 1 / span 1; }
+.tile-18 { grid-area: 9 / 11 / span 1 / span 1; }
+.tile-19 { grid-area: 10 / 11 / span 1 / span 1; }
 
 /* Bottom row */
-.tile:nth-child(n+22):nth-child(-n+30) {
-    grid-column: span 1;
-    grid-row: 10 / 12;
-}
+.tile-21 { grid-area: 11 / 10 / span 1 / span 1; }
+.tile-22 { grid-area: 11 / 9 / span 1 / span 1; }
+.tile-23 { grid-area: 11 / 8 / span 1 / span 1; }
+.tile-24 { grid-area: 11 / 7 / span 1 / span 1; }
+.tile-25 { grid-area: 11 / 6 / span 1 / span 1; }
+.tile-26 { grid-area: 11 / 5 / span 1 / span 1; }
+.tile-27 { grid-area: 11 / 4 / span 1 / span 1; }
+.tile-28 { grid-area: 11 / 3 / span 1 / span 1; }
+.tile-29 { grid-area: 11 / 2 / span 1 / span 1; }
 
 /* Left column */
-.tile:nth-child(11n+1):not(:first-child):not(:nth-child(11)):not(:nth-child(21)):not(:nth-child(31)) {
-    grid-column: 1 / 3;
-}
+.tile-31 { grid-area: 10 / 1 / span 1 / span 1; }
+.tile-32 { grid-area: 9 / 1 / span 1 / span 1; }
+.tile-33 { grid-area: 8 / 1 / span 1 / span 1; }
+.tile-34 { grid-area: 7 / 1 / span 1 / span 1; }
+.tile-35 { grid-area: 6 / 1 / span 1 / span 1; }
+.tile-36 { grid-area: 5 / 1 / span 1 / span 1; }
+.tile-37 { grid-area: 4 / 1 / span 1 / span 1; }
+.tile-38 { grid-area: 3 / 1 / span 1 / span 1; }
+.tile-39 { grid-area: 2 / 1 / span 1 / span 1; }
 
-/* Property colors */
-.property-brown { background-color: #8B4513; }
-.property-light-blue { background-color: #87CEEB; }
-.property-pink { background-color: #FFC0CB; }
-.property-orange { background-color: #FFA500; }
-.property-red { background-color: #FF0000; }
-.property-yellow { background-color: #FFFF00; }
-.property-green { background-color: #008000; }
-.property-blue { background-color: #0000FF; }
-
-/* Special tiles */
-.chance { background-color: #FFA07A; }
-.community-chest { background-color: #E6E6FA; }
-.tax { background-color: #D3D3D3; }
-.railroad { background-color: #A9A9A9; }
-.utility { background-color: #F0E68C; }
-
-/* Responsive font size */
-@media (max-width: 600px) {
-    .tile {
-        font-size: 1.5vw;
-    }
+.dice-container {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
 }

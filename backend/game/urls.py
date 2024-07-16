@@ -1,5 +1,5 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include 
+from rest_framework.routers import DefaultRouter 
 from game.views import PlayerViewSet, PropertyViewSet, StockViewSet, BankViewSet, BoardView
 from .views import roll_dice
 
