@@ -1,22 +1,15 @@
-/* DiceRoller.css */
 .dice-roller {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
+    text-align: center;
+    margin: 20px 0;
 }
 
-.dice {
-    display: flex;
+.dice-roller button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-.dice-face {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #000;
-    margin: 5px;
-    font-size: 20px;
+.dice-roller p {
+    margin-top: 10px;
+    font-size: 18px;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Tile.css';
 
-const Tile = ({ name, position, tile_type = 'unknown', property }) => {
+const Tile = ({ name, position, tile_type = 'unknown', property, children }) => {
     return (
         <div className={`tile ${tile_type.toLowerCase()}`}>
             <div className="tile-position">{position}</div>
@@ -15,6 +15,7 @@ const Tile = ({ name, position, tile_type = 'unknown', property }) => {
                     <div><strong>Color Group:</strong> {property.color_group}</div>
                 </div>
             )}
+            {children}
         </div>
     );
 };

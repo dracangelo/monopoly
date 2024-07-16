@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Tile from './Tile';
-import PlayerIcon from '../board/PlayerIcon';
+import PlayerIcon from './PlayerIcon';
 import DiceRoller from '../Dice/DiceRoller';
+import PlayerInfo from './PlayerInfo';
 import './Board.css';
 import { fetchBoard } from '../../api/api';
 import avatar1 from '../../assets/avatars/avatar1.png';
@@ -16,13 +17,20 @@ const Board = () => {
     const [error, setError] = useState(null);
     const [playerPositions, setPlayerPositions] = useState([0, 0, 0, 0, 0, 0]);
     const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [players, setPlayers] = useState([
+        { id: 1, name: 'Player 1', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+        { id: 2, name: 'Player 2', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+        { id: 3, name: 'Player 3', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+        { id: 4, name: 'Player 4', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+        { id: 5, name: 'Player 5', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+        { id: 6, name: 'Player 6', balance: 1500, properties: [], hotels: 0, mortgages: [] },
+    ]);
 
     useEffect(() => {
         const getBoardData = async () => {
             try {
                 const data = await fetchBoard();
                 if (data && Array.isArray(data)) {
-                    // Filter tiles to keep only 0-39 and sort by position
                     const sortedTiles = data
                         .filter(tile => tile.position >= 0 && tile.position <= 39)
                         .sort((a, b) => a.position - b.position);
@@ -40,10 +48,20 @@ const Board = () => {
 
     const movePlayer = (playerIndex, steps) => {
         setPlayerPositions(prevPositions =>
-            prevPositions.map((pos, index) =>
-                index === playerIndex ? (pos + steps) % 40 : pos
-            )
+            prevPositions.map((pos, index) => {
+                if (index === playerIndex) {
+                    const newPosition = (pos + steps) % 40;
+                    console.log(`Player ${index + 1} moving to position ${newPosition}`);
+                    return newPosition;
+                }
+                return pos;
+            })
         );
+
+        const updatedPlayers = [...players];
+        updatedPlayers[playerIndex].balance -= 200; // Deduct 200 as an example
+        updatedPlayers[playerIndex].properties.push(boardTiles[playerPositions[playerIndex]].name); // Example of adding property
+        setPlayers(updatedPlayers);
     };
 
     const handleRollDice = (totalSteps) => {
@@ -76,7 +94,8 @@ const Board = () => {
                     </div>
                 ))}
             </div>
-            <div className="dice-container">
+            <div className="sidebar">
+                <PlayerInfo player={players[currentPlayer]} />
                 <DiceRoller onRoll={handleRollDice} currentPlayer={currentPlayer} />
             </div>
         </div>

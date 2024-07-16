@@ -25,21 +25,16 @@
     text-align: center;
     padding: 5px;
     font-size: 0.7vw;
+    position: relative; /* To position player icons absolutely */
 }
 
+/* Define grid areas for each tile */
+
 /* Corner tiles */
-.tile-0 { /* GO */
-    grid-area: 1 / 1 / span 1 / span 1;
-}
-.tile-10 { /* Jail */
-    grid-area: 1 / 11 / span 1 / span 1;
-}
-.tile-20 { /* Free Parking */
-    grid-area: 11 / 11 / span 1 / span 1;
-}
-.tile-30 { /* Go To Jail */
-    grid-area: 11 / 1 / span 1 / span 1;
-}
+.tile-0 { grid-area: 1 / 1 / span 1 / span 1; }
+.tile-10 { grid-area: 1 / 11 / span 1 / span 1; }
+.tile-20 { grid-area: 11 / 11 / span 1 / span 1; }
+.tile-30 { grid-area: 11 / 1 / span 1 / span 1; }
 
 /* Top row */
 .tile-1 { grid-area: 1 / 2 / span 1 / span 1; }
@@ -89,4 +84,11 @@
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
+}
+
+.player-info {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
 }
