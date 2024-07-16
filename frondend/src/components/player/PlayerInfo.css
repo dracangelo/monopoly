@@ -1,0 +1,26 @@
+.player-info {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.player-info h2 {
+    margin-top: 0;
+}
+
+.player-info button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.player-info button:hover {
+    background-color: #0056b3;
+}

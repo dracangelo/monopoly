@@ -1,7 +1,7 @@
 import React from 'react';
 import './Tile.css';
 
-const Tile = ({ name, position, tile_type = 'unknown', property, children }) => {
+const Tile = ({ name, position, tile_type = 'unknown', property, onAction }) => {
     return (
         <div className={`tile ${tile_type.toLowerCase()}`}>
             <div className="tile-position">{position}</div>
@@ -15,7 +15,7 @@ const Tile = ({ name, position, tile_type = 'unknown', property, children }) => 
                     <div><strong>Color Group:</strong> {property.color_group}</div>
                 </div>
             )}
-            {children}
+            <button onClick={() => onAction(tile_type)}>Action</button>
         </div>
     );
 };
