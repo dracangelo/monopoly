@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// frontend/src/App.js
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles.css';
 import PlayerDashboard from './components/PlayerDashboard';
@@ -7,9 +8,30 @@ import BankDashboard from './components/BankDashboard';
 import StockMarket from './components/StockMarket';
 import Board from './components/board/Board';
 import DiceRoller from './components/Dice/DiceRoller';
+import { fetchBoard, fetchPlayers } from './api/api'; // Remove fetchBank and fetchStocks
 
 function App() {
     const [playerPositions, setPlayerPositions] = useState([0, 0, 0, 0, 0, 0]);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [boardTiles, setBoardTiles] = useState([]);
+    const [players, setPlayers] = useState([]);
+
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const [tilesData, playersData] = await Promise.all([
+                    fetchBoard(),
+                    fetchPlayers()
+                ]);
+                setBoardTiles(tilesData);
+                setPlayers(playersData);
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+            }
+        };
+
+        loadInitialData();
+    }, []);
 
     const movePlayer = (playerIndex, steps) => {
         setPlayerPositions(prevPositions => {
@@ -19,11 +41,16 @@ function App() {
         });
     };
 
+    const handleRoll = (roll) => {
+        movePlayer(currentPlayer, roll);
+        setCurrentPlayer((prevPlayer) => (prevPlayer + 1) % players.length);
+    };
+
     return (
         <Router>
             <div className="App">
-                <Board playerPositions={playerPositions} />
-                <DiceRoller movePlayer={movePlayer} />
+                <Board playerPositions={playerPositions} boardTiles={boardTiles} />
+                <DiceRoller onRoll={handleRoll} currentPlayer={currentPlayer} />
                 <Routes>
                     <Route path="/players" element={<PlayerDashboard />} />
                     <Route path="/properties" element={<PropertyCard />} />

@@ -1,4 +1,4 @@
-// api.js
+// frontend/src/api/api.js
 import axios from 'axios';
 import config from './config';
 
@@ -11,7 +11,7 @@ const api = axios.create({
 // Function to fetch the board
 export const fetchBoard = async () => {
     try {
-        const response = await api.get('/api/board/');
+        const response = await api.get('/api/tiles/');  // Assuming the tiles endpoint
         return response.data;
     } catch (error) {
         console.error('Fetch board data error:', error);
@@ -19,11 +19,10 @@ export const fetchBoard = async () => {
     }
 };
 
-
 // Function to fetch players
 export const fetchPlayers = async () => {
     try {
-        const response = await api.get('/players/');
+        const response = await api.get('/api/players/');
         return response.data;
     } catch (error) {
         console.error('Error fetching player data:', error);
@@ -31,10 +30,54 @@ export const fetchPlayers = async () => {
     }
 };
 
+// Function to fetch the bank balance
+export const fetchBank = async () => {
+    try {
+        const response = await api.get('/api/banks/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching bank balance:', error);
+        throw error;
+    }
+};
+
+// Function to fetch stocks
+export const fetchStocks = async () => {
+    try {
+        const response = await api.get('/api/stocks/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching stocks:', error);
+        throw error;
+    }
+};
+
+// Function to buy stock
+export const buyStock = async (stockId, amount) => {
+    try {
+        const response = await api.post(`/api/stocks/${stockId}/buy/`, { amount });
+        return response.data;
+    } catch (error) {
+        console.error('Error buying stock:', error);
+        throw error;
+    }
+};
+
+// Function to sell stock
+export const sellStock = async (stockId, amount) => {
+    try {
+        const response = await api.post(`/api/stocks/${stockId}/sell/`, { amount });
+        return response.data;
+    } catch (error) {
+        console.error('Error selling stock:', error);
+        throw error;
+    }
+};
+
 // Function to propose a trade
 export const proposeTrade = async (tradeDetails) => {
     try {
-        const response = await api.post('/trades/propose/', tradeDetails);
+        const response = await api.post('/api/trades/propose/', tradeDetails);
         return response.data;
     } catch (error) {
         console.error('Error proposing trade:', error);
@@ -45,7 +88,7 @@ export const proposeTrade = async (tradeDetails) => {
 // Function to accept a trade
 export const acceptTrade = async (tradeId) => {
     try {
-        const response = await api.post(`/trades/${tradeId}/accept/`);
+        const response = await api.post(`/api/trades/${tradeId}/accept/`);
         return response.data;
     } catch (error) {
         console.error('Error accepting trade:', error);

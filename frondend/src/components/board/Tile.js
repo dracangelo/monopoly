@@ -3,7 +3,7 @@ import './Tile.css';
 
 const Tile = ({ name, position, tile_type = 'unknown', property, onAction }) => {
     return (
-        <div className={`tile ${tile_type.toLowerCase()}`}>
+        <div className={`tile ${tile_type.toLowerCase()}`} onClick={onAction}>
             <div className="tile-position">{position}</div>
             <div className="tile-name">{name}</div>
             {property && (
@@ -15,7 +15,6 @@ const Tile = ({ name, position, tile_type = 'unknown', property, onAction }) => 
                     <div><strong>Color Group:</strong> {property.color_group}</div>
                 </div>
             )}
-            <button onClick={() => onAction(tile_type)}>Action</button>
         </div>
     );
 };

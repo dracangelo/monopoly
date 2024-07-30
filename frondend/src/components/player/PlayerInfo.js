@@ -1,22 +1,19 @@
 import React from 'react';
 import './PlayerInfo.css';
 
-const PlayerInfo = ({ player, mortgageProperty }) => {
+const PlayerInfo = ({ player }) => {
+    if (!player) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="player-info">
-            <h2>{player.name}</h2>
-            <p><strong>Balance:</strong> ${player.balance}</p>
-            <p><strong>Properties:</strong> {player.properties.join(', ')}</p>
-            <p><strong>Mortgaged Properties:</strong> {player.mortgagedProperties.join(', ')}</p>
-            <p><strong>Hotels:</strong> {player.hotels}</p>
-            <div>
-                {player.properties.map((property, index) => (
-                    <button key={index} onClick={() => mortgageProperty({ name: property, mortgageValue: 200 })}>
-                        Mortgage {property}
-                    </button>
-                ))}
-            </div>
-            {/* Add any other necessary player info */}
+            <img src={player.avatar} alt={`${player.name}'s avatar`} className="player-avatar" />
+            <h3>{player.name}</h3>
+            <p>Balance: ${player.balance}</p>
+            <p>Properties: {player.properties ? player.properties.length : 0}</p>
+            <p>Hotels: {player.hotels}</p>
+            <p>Mortgaged Properties: {player.mortgagedProperties ? player.mortgagedProperties.length : 0}</p>
         </div>
     );
 };

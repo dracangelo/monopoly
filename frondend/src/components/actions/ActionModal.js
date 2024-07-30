@@ -1,68 +1,25 @@
 import React from 'react';
 import './ActionModal.css';
 
-const ActionModal = ({ tile, player, onClose, onAction }) => {
-    const handleBuyProperty = () => {
-        onAction('buy');
-        onClose();
-    };
-
-    const handleMortgageProperty = () => {
-        onAction('mortgage');
-        onClose();
-    };
-
-    const handleDrawChanceCard = () => {
-        onAction('chance');
-        onClose();
-    };
-
-    const handleDrawCommunityCard = () => {
-        onAction('community');
-        onClose();
-    };
-
-    const handlePayFine = () => {
-        onAction('payFine');
-        onClose();
-    };
-
-    const handlePayTax = () => {
-        onAction('payTax');
-        onClose();
-    };
-
-    const handleBuyShares = () => {
-        onAction('buyShares');
-        onClose();
-    };
-
-    const handleGamble = () => {
-        onAction('gamble');
-        onClose();
-    };
-
-    const renderActionButton = () => {
+const ActionModal = ({ tile, player, onClose }) => {
+    const renderActionDescription = () => {
         switch (tile.tile_type) {
             case 'property':
-                return (
-                    <>
-                        <button onClick={handleBuyProperty}>Buy Property</button>
-                        <button onClick={handleMortgageProperty}>Mortgage Property</button>
-                    </>
-                );
+                return `You can buy ${tile.name} for $${tile.property?.price}.`;
+            case 'mortgage':
+                return `You can mortgage ${tile.name} for $${tile.property?.mortgageValue}.`;
             case 'chance':
-                return <button onClick={handleDrawChanceCard}>Draw Chance Card</button>;
+                return `Draw a chance card.`;
             case 'community':
-                return <button onClick={handleDrawCommunityCard}>Draw Community Card</button>;
+                return `Draw a community chest card.`;
             case 'jail':
-                return <button onClick={handlePayFine}>Pay Fine</button>;
+                return `Pay a fine of $50.`;
             case 'tax':
-                return <button onClick={handlePayTax}>Pay Tax</button>;
+                return `Pay a tax of $200.`;
             case 'stocks':
-                return <button onClick={handleBuyShares}>Buy Shares</button>;
+                return `Buy shares for $100.`;
             case 'casino':
-                return <button onClick={handleGamble}>Gamble</button>;
+                return `Gamble for a chance to win or lose $100.`;
             default:
                 return null;
         }
@@ -71,7 +28,7 @@ const ActionModal = ({ tile, player, onClose, onAction }) => {
     return (
         <div className="action-modal">
             <h2>Action for {tile.name}</h2>
-            {renderActionButton()}
+            <p>{renderActionDescription()}</p>
             <button onClick={onClose}>Close</button>
         </div>
     );
