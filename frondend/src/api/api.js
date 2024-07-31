@@ -19,6 +19,17 @@ export const fetchBoard = async () => {
     }
 };
 
+// Function to fetch tiles
+export const fetchTiles = async () => {
+    try {
+        const response = await api.get('/api/tiles/');  // Updated to use the axios instance
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching tiles", error);
+        throw error;
+    }
+};
+
 // Function to fetch players
 export const fetchPlayers = async () => {
     try {

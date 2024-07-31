@@ -1,104 +1,68 @@
-.board-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.bank-info {
-    margin-bottom: 20px;
-}
-
-.players-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
 .board {
     display: grid;
-    grid-template-rows: repeat(11, 1fr);
-    grid-template-columns: repeat(11, 1fr);
-    width: 600px;
-    height: 600px;
-    border: 1px solid black;
-    position: relative;
-}
-
-.board-grid {
-    display: grid;
-    grid-template-areas:
-        "go top-0 top-1 top-2 top-3 top-4 top-5 top-6 top-7 top-8 jail"
-        "left-8 . . . . . . . . . right-0"
-        "left-7 . . . . . . . . . right-1"
-        "left-6 . . . . . . . . . right-2"
-        "left-5 . . . . . . . . . right-3"
-        "left-4 . . . . . dice . . right-4"
-        "left-3 . . . . . . . . . right-5"
-        "left-2 . . . . . . . . . right-6"
-        "left-1 . . . . . . . . . right-7"
-        "left-0 . . . . . . . . . right-8"
-        "free-parking bottom-0 bottom-1 bottom-2 bottom-3 bottom-4 bottom-5 bottom-6 bottom-7 bottom-8 go-to-jail";
-    width: 100%;
-    height: 100%;
-}
-
-.center-dice {
-    grid-area: dice;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    grid-template-areas: 
+        "tile-0  tile-1  tile-2  tile-3  tile-4  tile-5  tile-6  tile-7  tile-8  tile-9  tile-10"
+        "tile-39 .       .       .       .       .       .       .       .       .        tile-11"
+        "tile-38 .       .       .       .       .       .       .       .       .        tile-12"
+        "tile-37 .       .       .       .       .       .       .       .       .        tile-13"
+        "tile-36 .       .       .       .       .       .       .       .       .        tile-14"
+        "tile-35 .       .       .       .       .       .       .       .       .        tile-15"
+        "tile-34 .       .       .       .       .       .       .       .       .        tile-16"
+        "tile-33 .       .       .       .       .       .       .       .       .        tile-17"
+        "tile-32 .       .       .       .       .       .       .       .       .        tile-18"
+        "tile-31 .       .       .       .       .       .       .       .       .        tile-19"
+        "tile-30 tile-29 tile-28 tile-27 tile-26 tile-25 tile-24 tile-23 tile-22 tile-21 tile-20";
+    grid-gap: 2px;
 }
 
 .tile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: 1px solid black;
-    background-color: white;
+    padding: 10px;
+    text-align: center;
 }
 
-.tile.go { grid-area: go; }
-.tile.jail { grid-area: jail; }
-.tile.free-parking { grid-area: free-parking; }
-.tile.go-to-jail { grid-area: go-to-jail; }
+.position-0 { grid-area: tile-0; }
+.position-1 { grid-area: tile-1; }
+.position-2 { grid-area: tile-2; }
+.position-3 { grid-area: tile-3; }
+.position-4 { grid-area: tile-4; }
+.position-5 { grid-area: tile-5; }
+.position-6 { grid-area: tile-6; }
+.position-7 { grid-area: tile-7; }
+.position-8 { grid-area: tile-8; }
+.position-9 { grid-area: tile-9; }
+.position-10 { grid-area: tile-10; }
+.position-11 { grid-area: tile-11; }
+.position-12 { grid-area: tile-12; }
+.position-13 { grid-area: tile-13; }
+.position-14 { grid-area: tile-14; }
+.position-15 { grid-area: tile-15; }
+.position-16 { grid-area: tile-16; }
+.position-17 { grid-area: tile-17; }
+.position-18 { grid-area: tile-18; }
+.position-19 { grid-area: tile-19; }
+.position-20 { grid-area: tile-20; }
+.position-21 { grid-area: tile-21; }
+.position-22 { grid-area: tile-22; }
+.position-23 { grid-area: tile-23; }
+.position-24 { grid-area: tile-24; }
+.position-25 { grid-area: tile-25; }
+.position-26 { grid-area: tile-26; }
+.position-27 { grid-area: tile-27; }
+.position-28 { grid-area: tile-28; }
+.position-29 { grid-area: tile-29; }
+.position-30 { grid-area: tile-30; }
+.position-31 { grid-area: tile-31; }
+.position-32 { grid-area: tile-32; }
+.position-33 { grid-area: tile-33; }
+.position-34 { grid-area: tile-34; }
+.position-35 { grid-area: tile-35; }
+.position-36 { grid-area: tile-36; }
+.position-37 { grid-area: tile-37; }
+.position-38 { grid-area: tile-38; }
+.position-39 { grid-area: tile-39; }
 
-.tile.top-0 { grid-area: top-0; }
-.tile.top-1 { grid-area: top-1; }
-.tile.top-2 { grid-area: top-2; }
-.tile.top-3 { grid-area: top-3; }
-.tile.top-4 { grid-area: top-4; }
-.tile.top-5 { grid-area: top-5; }
-.tile.top-6 { grid-area: top-6; }
-.tile.top-7 { grid-area: top-7; }
-.tile.top-8 { grid-area: top-8; }
-
-.tile.right-0 { grid-area: right-0; }
-.tile.right-1 { grid-area: right-1; }
-.tile.right-2 { grid-area: right-2; }
-.tile.right-3 { grid-area: right-3; }
-.tile.right-4 { grid-area: right-4; }
-.tile.right-5 { grid-area: right-5; }
-.tile.right-6 { grid-area: right-6; }
-.tile.right-7 { grid-area: right-7; }
-.tile.right-8 { grid-area: right-8; }
-
-.tile.bottom-0 { grid-area: bottom-0; }
-.tile.bottom-1 { grid-area: bottom-1; }
-.tile.bottom-2 { grid-area: bottom-2; }
-.tile.bottom-3 { grid-area: bottom-3; }
-.tile.bottom-4 { grid-area: bottom-4; }
-.tile.bottom-5 { grid-area: bottom-5; }
-.tile.bottom-6 { grid-area: bottom-6; }
-.tile.bottom-7 { grid-area: bottom-7; }
-.tile.bottom-8 { grid-area: bottom-8; }
-
-.tile.left-0 { grid-area: left-0; }
-.tile.left-1 { grid-area: left-1; }
-.tile.left-2 { grid-area: left-2; }
-.tile.left-3 { grid-area: left-3; }
-.tile.left-4 { grid-area: left-4; }
-.tile.left-5 { grid-area: left-5; }
-.tile.left-6 { grid-area: left-6; }
-.tile.left-7 { grid-area: left-7; }
-.tile.left-8 { grid-area: left-8; }
+.player {
+    font-weight: bold;
+    color: red;
+}
