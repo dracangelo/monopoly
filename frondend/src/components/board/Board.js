@@ -1,3 +1,4 @@
+// frontend/src/components/board/Board.js
 import React, { useState, useEffect } from 'react';
 import { fetchTiles } from '../../api/api';
 import './Board.css';
@@ -19,18 +20,27 @@ const Board = ({ playerPositions }) => {
         getTiles();
     }, []);
 
-    const renderTile = (tile, index) => (
-        <div key={index} className={`tile position-${tile.position}`}>
-            {tile.name}
-            {playerPositions.map((position, playerIndex) =>
-                position === tile.position ? (
-                    <div key={playerIndex} className={`player player-${playerIndex + 1}`}>
-                        P{playerIndex + 1}
-                    </div>
-                ) : null
-            )}
-        </div>
-    );
+    const renderTile = (tile, index) => {
+        const colorClass = tile.color_group ? tile.color_group.toLowerCase().replace(' ', '-') : '';
+        return (
+            <div key={index} className={`tile position-${tile.position}`}>
+                {colorClass && <div className={`property-color ${colorClass}`}></div>}
+                <div>{tile.name}</div>
+                <div>Rent: ${tile.rent}</div>
+                {playerPositions.map((position, playerIndex) =>
+                    position === tile.position ? (
+                        <div key={playerIndex} className={`player player-${playerIndex + 1}`}>
+                            P{playerIndex + 1}
+                        </div>
+                    ) : null
+                )}
+                {tile.house_count > 0 && [...Array(tile.house_count)].map((_, i) => (
+                    <div key={i} className="house"></div>
+                ))}
+                {tile.hotel_count > 0 && <div className="hotel"></div>}
+            </div>
+        );
+    };
 
     return (
         <div className="board">
