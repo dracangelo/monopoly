@@ -1,4 +1,3 @@
-// src/components/actions/StockCard.js
 import React, { useState, useEffect } from 'react';
 import { fetchStocks, buyStock, sellStock } from '../../api/api';
 import './StockCard.css';

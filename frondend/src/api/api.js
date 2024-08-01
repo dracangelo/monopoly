@@ -33,10 +33,11 @@ export const fetchTiles = async () => {
 // Function to fetch players
 export const fetchPlayers = async () => {
     try {
-        const response = await api.get('/api/players/');
-        return response.data;
+        const response = await fetch('/api/players'); // Replace with your API endpoint
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error('Error fetching player data:', error);
+        console.error("Error fetching players", error);
         throw error;
     }
 };
