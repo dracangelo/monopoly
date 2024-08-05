@@ -12,23 +12,24 @@
 }
 
 .tile {
+    border: 1px solid #000;
+    padding: 0.5vmin;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
     font-size: 0.7vmin;
-    border: 1px solid #000;
-    padding: 0.5vmin;
-    background-color: #f9f9f9;
-    position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease;
 }
 
-.tile:hover {
-    transform: scale(1.05);
-    z-index: 10;
+.tile .name {
+    font-weight: bold;
+    font-size: 0.8vmin;
+}
+
+.tile .rent, .tile .price {
+    font-size: 0.6vmin;
 }
 
 .tile .property-color {
@@ -36,42 +37,56 @@
     height: 1.5vmin;
 }
 
-.tile .name {
-    font-weight: bold;
-    margin-top: 0.5vmin;
+/* Corner tiles */
+.tile:nth-child(1), .tile:nth-child(11),
+.tile:nth-child(21), .tile:nth-child(31) {
+    grid-column: span 2;
+    grid-row: span 2;
+    justify-content: center;
+    font-size: 1vmin;
 }
 
-.tile .rent {
-    font-size: 0.6vmin;
-    margin-top: 0.3vmin;
-}
-
-.tile .house, .tile .hotel {
-    width: 1vmin;
-    height: 1vmin;
-    position: absolute;
-    bottom: 0.5vmin;
-    right: 0.5vmin;
-}
-
-.tile .house {
-    background-color: #2ecc71;
-}
-
-.tile .hotel {
-    background-color: #e74c3c;
-}
-
-.player {
-    width: 1.5vmin;
-    height: 1.5vmin;
-    border-radius: 50%;
-    display: inline-block;
-    margin: 0.2vmin;
-    position: absolute;
-    top: 0.5vmin;
-    left: 0.5vmin;
-}
+/* Positioning tiles */
+.tile:nth-child(1) { grid-area: 1 / 1 / 3 / 3; } /* GO */
+.tile:nth-child(2) { grid-area: 1 / 3 / 2 / 4; }
+.tile:nth-child(3) { grid-area: 1 / 4 / 2 / 5; }
+.tile:nth-child(4) { grid-area: 1 / 5 / 2 / 6; }
+.tile:nth-child(5) { grid-area: 1 / 6 / 2 / 7; }
+.tile:nth-child(6) { grid-area: 1 / 7 / 2 / 8; }
+.tile:nth-child(7) { grid-area: 1 / 8 / 2 / 9; }
+.tile:nth-child(8) { grid-area: 1 / 9 / 2 / 10; }
+.tile:nth-child(9) { grid-area: 1 / 10 / 2 / 11; }
+.tile:nth-child(10) { grid-area: 2 / 11 / 3 / 12; }
+.tile:nth-child(11) { grid-area: 1 / 11 / 3 / 12; } /* Jail */
+.tile:nth-child(12) { grid-area: 3 / 11 / 4 / 12; }
+.tile:nth-child(13) { grid-area: 4 / 11 / 5 / 12; }
+.tile:nth-child(14) { grid-area: 5 / 11 / 6 / 12; }
+.tile:nth-child(15) { grid-area: 6 / 11 / 7 / 12; }
+.tile:nth-child(16) { grid-area: 7 / 11 / 8 / 12; }
+.tile:nth-child(17) { grid-area: 8 / 11 / 9 / 12; }
+.tile:nth-child(18) { grid-area: 9 / 11 / 10 / 12; }
+.tile:nth-child(19) { grid-area: 10 / 11 / 11 / 12; }
+.tile:nth-child(20) { grid-area: 11 / 10 / 12 / 11; }
+.tile:nth-child(21) { grid-area: 11 / 10 / 12 / 12; } /* Free Parking */
+.tile:nth-child(22) { grid-area: 11 / 9 / 12 / 10; }
+.tile:nth-child(23) { grid-area: 11 / 8 / 12 / 9; }
+.tile:nth-child(24) { grid-area: 11 / 7 / 12 / 8; }
+.tile:nth-child(25) { grid-area: 11 / 6 / 12 / 7; }
+.tile:nth-child(26) { grid-area: 11 / 5 / 12 / 6; }
+.tile:nth-child(27) { grid-area: 11 / 4 / 12 / 5; }
+.tile:nth-child(28) { grid-area: 11 / 3 / 12 / 4; }
+.tile:nth-child(29) { grid-area: 11 / 2 / 12 / 3; }
+.tile:nth-child(30) { grid-area: 10 / 1 / 11 / 2; }
+.tile:nth-child(31) { grid-area: 10 / 1 / 12 / 3; } /* Go To Jail */
+.tile:nth-child(32) { grid-area: 9 / 1 / 10 / 2; }
+.tile:nth-child(33) { grid-area: 8 / 1 / 9 / 2; }
+.tile:nth-child(34) { grid-area: 7 / 1 / 8 / 2; }
+.tile:nth-child(35) { grid-area: 6 / 1 / 7 / 2; }
+.tile:nth-child(36) { grid-area: 5 / 1 / 6 / 2; }
+.tile:nth-child(37) { grid-area: 4 / 1 / 5 / 2; }
+.tile:nth-child(38) { grid-area: 3 / 1 / 4 / 2; }
+.tile:nth-child(39) { grid-area: 2 / 1 / 3 / 2; }
+.tile:nth-child(40) { grid-area: 1 / 2 / 2 / 3; }
 
 /* Property color groups */
 .brown { background-color: #8B4513; }
@@ -83,85 +98,38 @@
 .green { background-color: #008000; }
 .dark-blue { background-color: #00008B; }
 
-/* Corner tiles */
-.position-0, .position-10, .position-20, .position-30 {
-    font-weight: bold;
-    font-size: 0.9vmin;
-    background-color: #f0f0f0;
-}
-
-/* Railroad tiles */
-.position-5, .position-15, .position-25, .position-35 {
-    background-color: #ddd;
-}
-
-/* Utility tiles */
-.position-12, .position-28 {
-    background-color: #e0e0e0;
-}
-
-/* Chance and Community Chest tiles */
-.position-2, .position-17, .position-33,
-.position-7, .position-22, .position-36 {
+/* Special tiles */
+.chance, .community-chest {
     background-color: #FFA07A;
 }
 
-/* Tax tiles */
-.position-4, .position-38 {
-    background-color: #D3D3D3;
+.railroad {
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
-/* Add specific positioning for corner tiles */
-.position-0 { grid-area: 11 / 11 / 12 / 12; }
-.position-10 { grid-area: 1 / 11 / 2 / 12; }
-.position-20 { grid-area: 1 / 1 / 2 / 2; }
-.position-30 { grid-area: 11 / 1 / 12 / 2; }
+.utility {
+    background-color: #C0C0C0;
+}
 
-/* Add specific positioning for the top row */
-.position-1 { grid-area: 1 / 10 / 2 / 11; }
-.position-2 { grid-area: 1 / 9 / 2 / 10; }
-.position-3 { grid-area: 1 / 8 / 2 / 9; }
-.position-4 { grid-area: 1 / 7 / 2 / 8; }
-.position-5 { grid-area: 1 / 6 / 2 / 7; }
-.position-6 { grid-area: 1 / 5 / 2 / 6; }
-.position-7 { grid-area: 1 / 4 / 2 / 5; }
-.position-8 { grid-area: 1 / 3 / 2 / 4; }
-.position-9 { grid-area: 1 / 2 / 2 / 3; }
+.tax {
+    background-color: #FF6347;
+}
 
-/* Add specific positioning for the right column */
-.position-11 { grid-area: 2 / 11 / 3 / 12; }
-.position-12 { grid-area: 3 / 11 / 4 / 12; }
-.position-13 { grid-area: 4 / 11 / 5 / 12; }
-.position-14 { grid-area: 5 / 11 / 6 / 12; }
-.position-15 { grid-area: 6 / 11 / 7 / 12; }
-.position-16 { grid-area: 7 / 11 / 8 / 12; }
-.position-17 { grid-area: 8 / 11 / 9 / 12; }
-.position-18 { grid-area: 9 / 11 / 10 / 12; }
-.position-19 { grid-area: 10 / 11 / 11 / 12; }
+.free-parking, .go-to-jail, .jail, .go {
+    background-color: #FFFFFF;
+}
 
-/* Add specific positioning for the bottom row */
-.position-21 { grid-area: 11 / 2 / 12 / 3; }
-.position-22 { grid-area: 11 / 3 / 12 / 4; }
-.position-23 { grid-area: 11 / 4 / 12 / 5; }
-.position-24 { grid-area: 11 / 5 / 12 / 6; }
-.position-25 { grid-area: 11 / 6 / 12 / 7; }
-.position-26 { grid-area: 11 / 7 / 12 / 8; }
-.position-27 { grid-area: 11 / 8 / 12 / 9; }
-.position-28 { grid-area: 11 / 9 / 12 / 10; }
-.position-29 { grid-area: 11 / 10 / 12 / 11; }
+/* Player token */
+.player {
+    width: 1.5vmin;
+    height: 1.5vmin;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.5vmin;
+    left: 0.5vmin;
+}
 
-/* Add specific positioning for the left column */
-.position-31 { grid-area: 10 / 1 / 11 / 2; }
-.position-32 { grid-area: 9 / 1 / 10 / 2; }
-.position-33 { grid-area: 8 / 1 / 9 / 2; }
-.position-34 { grid-area: 7 / 1 / 8 / 2; }
-.position-35 { grid-area: 6 / 1 / 7 / 2; }
-.position-36 { grid-area: 5 / 1 / 6 / 2; }
-.position-37 { grid-area: 4 / 1 / 5 / 2; }
-.position-38 { grid-area: 3 / 1 / 4 / 2; }
-.position-39 { grid-area: 2 / 1 / 3 / 2; }
-
-/* Player colors */
 .player-1 { background-color: #e74c3c; }
 .player-2 { background-color: #3498db; }
 .player-3 { background-color: #2ecc71; }

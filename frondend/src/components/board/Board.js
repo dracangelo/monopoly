@@ -1,108 +1,130 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTiles } from '../../api/api';
+import { fetchBoard, fetchPlayers, fetchBank } from '../../api/api';
 import PlayerInfo from '../player/PlayerInfo';
 import ActionModal from '../actions/ActionModal';
 import StockCard from '../actions/StockCard';
+import DiceRoller from '../Dice/DiceRoller';
 import './Board.css';
+import Tile from './Tile';
+import PlayerIcon from '../board/PlayerIcon';
+import avatar1 from '../../assets/avatars/avatar1.png';
+import avatar2 from '../../assets/avatars/avatar2.png';
+import avatar3 from '../../assets/avatars/avatar3.png';
+import avatar4 from '../../assets/avatars/avatar4.png';
+import avatar5 from '../../assets/avatars/avatar5.png';
+import avatar6 from '../../assets/avatars/avatar6.png';
 
-const Board = ({ players = [] }) => {
-    const [tiles, setTiles] = useState([]);
-    const [playerPositions, setPlayerPositions] = useState([]);
-    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-    const [selectedTile, setSelectedTile] = useState(null);
-    const [showActionModal, setShowActionModal] = useState(false);
+const initialPlayers = [
+    { id: 1, name: 'Player 1', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar1 },
+    { id: 2, name: 'Player 2', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar2 },
+    { id: 3, name: 'Player 3', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar3 },
+    { id: 4, name: 'Player 4', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar4 },
+    { id: 5, name: 'Player 5', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar5 },
+    { id: 6, name: 'Player 6', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar6 },
+];
+
+const Board = () => {
+    const [boardTiles, setBoardTiles] = useState([]);
+    const [players, setPlayers] = useState(initialPlayers);
+    const [bankBalance, setBankBalance] = useState(0);
+    const [playerPositions, setPlayerPositions] = useState([0, 0, 0, 0, 0, 0]);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [currentTile, setCurrentTile] = useState(null);
     const [showStockCard, setShowStockCard] = useState(false);
 
     useEffect(() => {
-        const getTiles = async () => {
+        const getBoardData = async () => {
             try {
-                const data = await fetchTiles();
-                const filteredTiles = data.filter(tile => tile.id >= 0 && tile.id < 40);
-                setTiles(filteredTiles);
+                const data = await fetchBoard();
+                setBoardTiles(data.filter(tile => tile.id >= 0 && tile.id < 40));
             } catch (error) {
-                console.error("Error fetching tiles", error);
+                console.error('Error fetching board data:', error);
             }
         };
 
-        getTiles();
+        const getPlayersData = async () => {
+            try {
+                const data = await fetchPlayers();
+                setPlayers(data);
+            } catch (error) {
+                console.error('Error fetching players data:', error);
+            }
+        };
+
+        const getBankBalance = async () => {
+            try {
+                const data = await fetchBank();
+                setBankBalance(data.balance);
+            } catch (error) {
+                console.error('Error fetching bank balance:', error);
+            }
+        };
+
+        getBoardData();
+        getPlayersData();
+        getBankBalance();
     }, []);
 
-    useEffect(() => {
-        setPlayerPositions(players.map(() => 0));
-    }, [players]);
-
-    const handleTileClick = (tile) => {
-        setSelectedTile(tile);
-        setShowActionModal(true);
+    const handleRoll = (totalRoll) => {
+        const newPositions = [...playerPositions];
+        newPositions[currentPlayer] = (newPositions[currentPlayer] + totalRoll) % boardTiles.length;
+        setPlayerPositions(newPositions);
+        setCurrentPlayer((currentPlayer + 1) % players.length);
     };
 
-    const closeActionModal = () => {
-        setShowActionModal(false);
-        setSelectedTile(null);
+    const handleTileAction = (tile) => {
+        setCurrentTile(tile);
+        setShowModal(true);
     };
 
-    const closeStockCard = () => {
+    const closeModal = () => {
+        setShowModal(false);
         setShowStockCard(false);
     };
 
-    const handleRollDice = (roll) => {
-        const newPosition = (playerPositions[currentPlayerIndex] + roll) % tiles.length;
-        const newPositions = [...playerPositions];
-        newPositions[currentPlayerIndex] = newPosition;
-        setPlayerPositions(newPositions);
-
-        const tile = tiles[newPosition];
-        handleTileClick(tile);
-
-        // Move to the next player's turn
-        setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
-    };
-
-    const renderTile = (tile, index) => {
-        return (
-            <div key={index} className={`tile position-${tile.position}`} onClick={() => handleTileClick(tile)}>
-                <div className={`property-color ${tile.color_group?.toLowerCase().replace(' ', '-')}`}></div>
-                <div>{tile.name}</div>
-                <div>Rent: ${tile.rent}</div>
-                {tile.house_count > 0 && [...Array(tile.house_count)].map((_, i) => (
-                    <div key={i} className="house"></div>
-                ))}
-                {tile.hotel_count > 0 && <div className="hotel"></div>}
-                {playerPositions.includes(index) && (
-                    <div className="players">
-                        {players.map((player, playerIndex) => {
-                            if (playerPositions[playerIndex] === index) {
-                                return <div key={player.id} className={`player player-${playerIndex + 1}`}></div>;
-                            }
-                            return null;
-                        })}
-                    </div>
-                )}
-            </div>
-        );
+    const openStockCard = () => {
+        setShowStockCard(true);
     };
 
     return (
-        <div>
-            <div className="board">
-                {tiles.map((tile, index) => renderTile(tile, index))}
+        <div className="game-container">
+            <div className="bank-info">
+                <h3>Bank Balance: ${bankBalance}</h3>
             </div>
-            <div className="player-info-container">
+            <div className="players-info">
                 {players.map((player, index) => (
-                    <PlayerInfo key={player.id} player={player} position={playerPositions[index]} />
+                    <PlayerInfo key={player.id} player={player} />
                 ))}
             </div>
-            {showActionModal && selectedTile && (
+            <div className="board">
+                {boardTiles.map((tile, index) => (
+                    <Tile
+                        key={index}
+                        {...tile}
+                        position={index}
+                        onAction={handleTileAction}
+                    />
+                ))}
+                {players.map((player, index) => (
+                    <PlayerIcon 
+                        key={player.id} 
+                        player={player} 
+                        position={playerPositions[index]}
+                        playerNumber={index + 1}
+                    />
+                ))}
+            </div>
+            <DiceRoller currentPlayer={currentPlayer} setPlayerPositions={setPlayerPositions} onRoll={handleRoll} />
+            {showModal && (
                 <ActionModal
-                    tile={selectedTile}
-                    player={players[currentPlayerIndex]}
-                    onClose={closeActionModal}
+                    tile={currentTile}
+                    player={players[currentPlayer]}
+                    onClose={closeModal}
+                    openStockCard={openStockCard}
                 />
             )}
-            {showStockCard && (
-                <StockCard onClose={closeStockCard} />
-            )}
-            <button onClick={() => handleRollDice(Math.floor(Math.random() * 6) + 1)}>Roll Dice</button>
+            {showStockCard && <StockCard onClose={closeModal} />}
         </div>
     );
 };
