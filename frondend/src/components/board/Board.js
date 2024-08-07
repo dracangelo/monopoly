@@ -4,15 +4,15 @@ import PlayerInfo from '../player/PlayerInfo';
 import ActionModal from '../actions/ActionModal';
 import StockCard from '../actions/StockCard';
 import DiceRoller from '../Dice/DiceRoller';
-import './Board.css';
 import Tile from './Tile';
-import PlayerIcon from '../board/PlayerIcon';
+import PlayerIcon from './PlayerIcon';
 import avatar1 from '../../assets/avatars/avatar1.png';
 import avatar2 from '../../assets/avatars/avatar2.png';
 import avatar3 from '../../assets/avatars/avatar3.png';
 import avatar4 from '../../assets/avatars/avatar4.png';
 import avatar5 from '../../assets/avatars/avatar5.png';
 import avatar6 from '../../assets/avatars/avatar6.png';
+import './Board.css';
 
 const initialPlayers = [
     { id: 1, name: 'Player 1', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar1 },
@@ -32,6 +32,8 @@ const Board = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentTile, setCurrentTile] = useState(null);
     const [showStockCard, setShowStockCard] = useState(false);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getBoardData = async () => {
@@ -39,7 +41,10 @@ const Board = () => {
                 const data = await fetchBoard();
                 setBoardTiles(data.filter(tile => tile.id >= 0 && tile.id < 40));
             } catch (error) {
+                setError('Error fetching board data');
                 console.error('Error fetching board data:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -48,6 +53,7 @@ const Board = () => {
                 const data = await fetchPlayers();
                 setPlayers(data);
             } catch (error) {
+                setError('Error fetching players data');
                 console.error('Error fetching players data:', error);
             }
         };
@@ -57,6 +63,7 @@ const Board = () => {
                 const data = await fetchBank();
                 setBankBalance(data.balance);
             } catch (error) {
+                setError('Error fetching bank balance');
                 console.error('Error fetching bank balance:', error);
             }
         };
@@ -87,6 +94,14 @@ const Board = () => {
         setShowStockCard(true);
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
         <div className="game-container">
             <div className="bank-info">
@@ -94,7 +109,7 @@ const Board = () => {
             </div>
             <div className="players-info">
                 {players.map((player, index) => (
-                    <PlayerInfo key={player.id} player={player} />
+                    <PlayerInfo key={player.id} player={player} position={playerPositions[index]} />
                 ))}
             </div>
             <div className="board">
@@ -104,6 +119,7 @@ const Board = () => {
                         {...tile}
                         position={index}
                         onAction={handleTileAction}
+                        className={`tile position-${index}`}
                     />
                 ))}
                 {players.map((player, index) => (

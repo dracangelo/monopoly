@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api/api';
 import PropertyCard from './PropertyCard';
-import StockMarket from './StockMarket';
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'; 
 
 const PlayerDashboard = () => {
     const [player, setPlayer] = useState(null);
 
     const fetchPlayerDetails = async () => {
         try {
-            const response = await axios.get('/players/1/');
+            const response = await axios.get('/api/players/1/'); // Corrected endpoint
             setPlayer(response.data);
         } catch (error) {
             console.error("Error fetching player details:", error);
@@ -18,17 +17,49 @@ const PlayerDashboard = () => {
 
     useEffect(() => {
         fetchPlayerDetails();
+    }, []);
 
+    useEffect(() => {
         const socket = io('ws://localhost:8000/ws/game/');
+
         socket.on('message', (data) => {
             const message = JSON.parse(data);
-            if (message.type === 'balance_update' && message.player_id === player.id) {
-                setPlayer((prevPlayer) => ({
-                    ...prevPlayer,
-                    balance: message.balance,
-                }));
+            if (player && message.player_id === player.id) {
+                switch (message.type) {
+                    case 'balance_update':
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            balance: message.balance,
+                        }));
+                        break;
+                    case 'property_update':
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            properties: message.properties,
+                        }));
+                        break;
+                    case 'stock_update':
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            stocks: message.stocks,
+                        }));
+                        break;
+                    case 'gambling_result':
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            balance: message.new_balance,
+                        }));
+                        break;
+                    case 'mortgage_update':
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            properties: message.properties,
+                        }));
+                        break;
+                    default:
+                        console.warn('Unknown message type:', message.type);
+                }
             }
-            // Handle other types of updates (properties, stocks, etc.)
         });
 
         return () => {
@@ -38,7 +69,7 @@ const PlayerDashboard = () => {
 
     const handleEndTurn = async () => {
         try {
-            await axios.post(`/players/1/end_turn/`);
+            await axios.post(`/api/players/1/end_turn/`); // Corrected endpoint
             fetchPlayerDetails();
         } catch (error) {
             console.error("Error ending turn:", error);

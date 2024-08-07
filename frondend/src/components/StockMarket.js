@@ -6,7 +6,7 @@ const StockMarket = ({ playerId }) => {
 
     const fetchStockPrices = async () => {
         try {
-            const response = await axios.get('/stocks/');
+            const response = await axios.get('/api/stocks/'); // Corrected endpoint
             setStocks(response.data);
         } catch (error) {
             console.error("Error fetching stock prices:", error);
@@ -19,9 +19,8 @@ const StockMarket = ({ playerId }) => {
 
     const handleBuyStock = async (stockId, amount) => {
         try {
-            await axios.post(`/stocks/${stockId}/buy/`, { playerId, amount });
-            // Update stock prices after buying
-            fetchStockPrices();
+            await axios.post(`/api/stocks/${stockId}/buy/`, { playerId, amount }); // Corrected endpoint
+            fetchStockPrices(); // Update stock prices after buying
         } catch (error) {
             console.error("Error buying stock:", error);
         }
@@ -29,9 +28,8 @@ const StockMarket = ({ playerId }) => {
 
     const handleSellStock = async (stockId, amount) => {
         try {
-            await axios.post(`/stocks/${stockId}/sell/`, { playerId, amount });
-            // Update stock prices after selling
-            fetchStockPrices();
+            await axios.post(`/api/stocks/${stockId}/sell/`, { playerId, amount }); // Corrected endpoint
+            fetchStockPrices(); // Update stock prices after selling
         } catch (error) {
             console.error("Error selling stock:", error);
         }

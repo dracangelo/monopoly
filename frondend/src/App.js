@@ -8,7 +8,7 @@ import BankDashboard from './components/BankDashboard';
 import StockMarket from './components/StockMarket';
 import Board from './components/board/Board';
 import DiceRoller from './components/Dice/DiceRoller';
-import { fetchBoard, fetchPlayers } from './api/api'; // Remove fetchBank and fetchStocks
+import { fetchBoard, fetchPlayers } from './api/api';
 
 function App() {
     const [playerPositions, setPlayerPositions] = useState([0, 0, 0, 0, 0, 0]);
@@ -52,7 +52,7 @@ function App() {
                 <Board playerPositions={playerPositions} boardTiles={boardTiles} />
                 <DiceRoller onRoll={handleRoll} currentPlayer={currentPlayer} />
                 <Routes>
-                    <Route path="/players" element={<PlayerDashboard />} />
+                    <Route path="/players" element={<PlayerDashboard players={players} />} />
                     <Route path="/properties" element={<PropertyCard />} />
                     <Route path="/bank" element={<BankDashboard />} />
                     <Route path="/stocks" element={<StockMarket />} />

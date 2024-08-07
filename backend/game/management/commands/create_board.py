@@ -1,9 +1,11 @@
 from django.core.management.base import BaseCommand
 from game.models.board import Board, Space
 from game.models.property import Property
+from PIL import Image, ImageDraw, ImageFont
+import os
 
 class Command(BaseCommand):
-    help = 'Create Monopoly board with spaces'
+    help = 'Create Monopoly board with spaces and generate board image'
 
     def handle(self, *args, **kwargs):
         board, created = Board.objects.get_or_create(name='Monopoly Board')
@@ -59,3 +61,82 @@ class Command(BaseCommand):
             space.save()
 
         self.stdout.write(self.style.SUCCESS('Successfully created Monopoly board and spaces.'))
+
+        # Generate board image
+        self.generate_board_image(spaces)
+
+    def generate_board_image(self, spaces):
+        board_size = 800
+        tile_size = board_size // 11
+        font_path = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'  # Update path as needed
+        font = ImageFont.truetype(font_path, 14)
+        
+        # Create a new image
+        board = Image.new('RGBA', (board_size, board_size), 'white')
+        draw = ImageDraw.Draw(board)
+
+        # Define positions for standard tiles
+        positions = {
+            'GO': (0, 10),
+            'JAIL': (10, 0),
+            'FREE_PARKING': (10, 10),
+            'GO_TO_JAIL': (0, 0),
+            'CHANCE': [(2, 10), (7, 0), (10, 2)],
+            'COMMUNITY_CHEST': [(4, 10), (10, 4), (0, 7)],
+            'CASINO': [(6, 10), (10, 6)],
+            'TRADE': [(8, 10), (10, 8)]
+        }
+
+        # Function to draw tiles
+        def draw_tile(position, text, color):
+            x, y = position
+            x0, y0 = x * tile_size, y * tile_size
+            x1, y1 = x0 + tile_size, y0 + tile_size
+            draw.rectangle([x0, y0, x1, y1], fill=color, outline='black')
+            draw.text((x0 + 10, y0 + 10), text, font=font, fill='black')
+
+        # Draw the standard tiles
+        draw_tile(positions['GO'], 'GO', 'green')
+        draw_tile(positions['JAIL'], 'JAIL', 'yellow')
+        draw_tile(positions['FREE_PARKING'], 'FREE PARKING', 'yellow')
+        draw_tile(positions['GO_TO_JAIL'], 'GO TO JAIL', 'red')
+
+        # Draw Chance tiles
+        for pos in positions['CHANCE']:
+            draw_tile(pos, 'CHANCE', 'orange')
+
+        # Draw Community Chest tiles
+        for pos in positions['COMMUNITY_CHEST']:
+            draw_tile(pos, 'COMMUNITY CHEST', 'blue')
+
+        # Draw Casino tiles
+        for pos in positions['CASINO']:
+            draw_tile(pos, 'CASINO', 'purple')
+
+        # Draw Trade tiles
+        for pos in positions['TRADE']:
+            draw_tile(pos, 'TRADE', 'cyan')
+
+        # Draw property tiles
+        property_colors = {
+            'Brown': 'brown',
+            'Light Blue': 'lightblue',
+            'Pink': 'pink',
+            'Orange': 'orange',
+            'Red': 'red',
+            'Yellow': 'yellow',
+            'Green': 'green',
+            'Dark Blue': 'darkblue'
+        }
+
+        for space in spaces:
+            if space['space_type'] == 'PROPERTY':
+                property_name = space['name']
+                property_obj = space['property']
+                property_color = property_colors[property_obj.color]
+                draw_tile((space['position'] % 10, space['position'] // 10), property_name, property_color)
+
+        # Save the image
+        board_path = os.path.join('media', 'monopoly_board.png')
+        board.save(board_path)
+        self.stdout.write(self.style.SUCCESS(f'Board image created at {board_path}'))

@@ -1,15 +1,18 @@
 .dice-roller {
-    text-align: center;
-    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .dice-roller button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .dice-roller p {
-    margin-top: 10px;
     font-size: 18px;
+    margin: 5px 0;
 }

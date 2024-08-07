@@ -12,6 +12,7 @@ from channels.layers import get_channel_layer
 from django.views import View
 from django.http import JsonResponse
 import random
+from django.shortcuts import get_object_or_404
 
 def send_game_update(message):
     channel_layer = get_channel_layer()
@@ -188,6 +189,16 @@ def roll_dice(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
+def player_detail(request, player_id):
+    player = get_object_or_404(Player, id=player_id)
+    data = {
+        'name': player.name,
+        'balance': player.balance,
+        'position': player.position,
+        'properties': list(player.properties.values()),
+        'mortgagedProperties': list(player.mortgaged_properties.values())
+    }
+    return JsonResponse(data)
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer

@@ -1,4 +1,3 @@
-// frontend/src/api/api.js
 import axios from 'axios';
 import config from './config';
 
@@ -11,7 +10,7 @@ const api = axios.create({
 // Function to fetch the board
 export const fetchBoard = async () => {
     try {
-        const response = await api.get('/api/tiles/');  // Assuming the tiles endpoint
+        const response = await api.get('/api/tiles/');
         return response.data;
     } catch (error) {
         console.error('Fetch board data error:', error);
@@ -19,25 +18,13 @@ export const fetchBoard = async () => {
     }
 };
 
-// Function to fetch tiles
-export const fetchTiles = async () => {
-    try {
-        const response = await api.get('/api/tiles/');  // Updated to use the axios instance
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching tiles", error);
-        throw error;
-    }
-};
-
 // Function to fetch players
 export const fetchPlayers = async () => {
     try {
-        const response = await fetch('/api/players'); // Replace with your API endpoint
-        const data = await response.json();
-        return data;
+        const response = await api.get('/api/players/');
+        return response.data;
     } catch (error) {
-        console.error("Error fetching players", error);
+        console.error('Error fetching players:', error);
         throw error;
     }
 };
@@ -107,6 +94,18 @@ export const acceptTrade = async (tradeId) => {
         throw error;
     }
 };
+
+// Function to fetch player information
+export const getPlayerInfo = async (playerId) => {
+    try {
+        const response = await api.get(`/players/${playerId}/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching player info:', error.response || error);
+        throw error;
+    }
+};
+
 
 // Export the configured axios instance for direct use in components
 export default api;

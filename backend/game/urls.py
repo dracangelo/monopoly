@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from game.views import PlayerViewSet, PropertyViewSet, StockViewSet, BankViewSet, BoardView, TileViewSet
 from .views import roll_dice
 from game.routes.tile_routes import TileListView
+from . import views
 
 # Create a router and register the viewsets
 router = DefaultRouter()
@@ -18,4 +19,5 @@ urlpatterns = [
     path('board/', BoardView.as_view(), name='board'),
     path('roll_dice/', roll_dice, name='roll_dice'),
     path('tiles/', TileListView.as_view(), name='tile-list'),
+    path('api/players/<int:player_id>/', views.player_detail, name='player-detail'),
 ]
