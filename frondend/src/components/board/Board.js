@@ -39,7 +39,25 @@ const Board = () => {
         const getBoardData = async () => {
             try {
                 const data = await fetchBoard();
-                setBoardTiles(data.filter(tile => tile.id >= 0 && tile.id < 40));
+
+                // Ensure all property tiles have a property object with default values
+                const updatedTiles = data.map(tile => {
+                    if (tile.tile_type === 'property' && !tile.property) {
+                        tile.property = {
+                            owner: null,
+                            price: 0,
+                            rent: 0,
+                            houses: 0,
+                            hotel: false,
+                            color_group: '',
+                            mortgageValue: 0,
+                            isMortgaged: false
+                        };
+                    }
+                    return tile;
+                });
+
+                setBoardTiles(updatedTiles.filter(tile => tile.id >= 0 && tile.id < 40));
             } catch (error) {
                 setError('Error fetching board data');
                 console.error('Error fetching board data:', error);
@@ -95,6 +113,63 @@ const Board = () => {
         setShowStockCard(true);
     };
 
+    const handleBuyProperty = (tile) => {
+        if (!tile.property) {
+            console.error('Property data is missing');
+            return;
+        }
+
+        const updatedPlayers = [...players];
+        const player = updatedPlayers[currentPlayer];
+
+        player.properties = player.properties || [];
+
+        if (player.balance >= tile.property.price) {
+            player.balance -= tile.property.price;
+            player.properties.push(tile.property);
+            tile.property.owner = player.name;
+            setPlayers(updatedPlayers);
+            closeModal();
+        } else {
+            console.error('Not enough balance to buy the property');
+        }
+    };
+
+    const handlePayRent = (tile) => {
+        const updatedPlayers = [...players];
+        const player = updatedPlayers[currentPlayer];
+
+        if (tile.property && tile.property.owner) {
+            const rent = tile.property.rent;
+            const owner = updatedPlayers.find(p => p.name === tile.property.owner);
+
+            if (player.balance >= rent) {
+                player.balance -= rent;
+                if (owner) {
+                    owner.balance += rent;
+                }
+            } else {
+                console.error('Not enough balance to pay the rent');
+            }
+        }
+        setPlayers(updatedPlayers);
+        closeModal();
+    };
+
+    const handleMortgageProperty = (tile) => {
+        const updatedPlayers = [...players];
+        const player = updatedPlayers[currentPlayer];
+
+        if (tile.property && tile.property.owner === player.name && !tile.property.isMortgaged) {
+            player.balance += tile.property.mortgageValue;
+            tile.property.isMortgaged = true;
+            setPlayers(updatedPlayers);
+        } else {
+            console.error('Cannot mortgage property');
+        }
+        closeModal();
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -138,6 +213,9 @@ const Board = () => {
                     tile={currentTile}
                     player={players[currentPlayer]}
                     onClose={closeModal}
+                    onBuyProperty={() => handleBuyProperty(currentTile)}
+                    onPayRent={() => handlePayRent(currentTile)}
+                    onMortgageProperty={() => handleMortgageProperty(currentTile)}
                     openStockCard={openStockCard}
                 />
             )}

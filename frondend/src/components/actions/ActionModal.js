@@ -1,35 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ActionModal.css';
 
-const ActionModal = ({ tile, player, onClose }) => {
+const ActionModal = ({ tile, player, onClose, onBuyProperty, onPayRent, onMortgageProperty, onSellProperty, onDrawCard }) => {
+    const [selectedAction, setSelectedAction] = useState(null);
+
     const renderActionDescription = () => {
         switch (tile.tile_type) {
             case 'property':
-                if (tile.property && tile.property.price !== undefined) {
+                if (tile.property && tile.property.owner && tile.property.owner !== player.name) {
+                    return `You must pay ${tile.property.owner} $${tile.property.rent} in rent for landing on ${tile.name}.`;
+                } else if (tile.property && !tile.property.owner) {
                     return `You can buy ${tile.name} for $${tile.property.price}.`;
                 } else {
-                    return `Property information is unavailable for ${tile.name}.`;
+                    return `You already own ${tile.name}.`;
                 }
             case 'mortgage':
-                if (tile.property && tile.property.mortgageValue !== undefined) {
-                    return `You can mortgage ${tile.name} for $${tile.property.mortgageValue}.`;
-                } else {
-                    return `Mortgage information is unavailable for ${tile.name}.`;
-                }
+                return `You can mortgage ${tile.name}.`;
             case 'chance':
-                return `Draw a chance card.`;
             case 'community':
-                return `Draw a community chest card.`;
-            case 'jail':
-                return `Pay a fine of $50.`;
-            case 'tax':
-                return `Pay a tax of $200.`;
-            case 'stocks':
-                return `Buy shares for $100.`;
-            case 'casino':
-                return `Gamble for a chance to win or lose $100.`;
+                return onDrawCard();
             default:
                 return null;
+        }
+    };
+
+    const handleAction = () => {
+        if (selectedAction === 'buy') {
+            onBuyProperty(tile);
+        } else if (selectedAction === 'payRent') {
+            onPayRent(tile);
+        } else if (selectedAction === 'mortgage') {
+            onMortgageProperty(tile);
+        } else {
+            onClose();
         }
     };
 
@@ -37,7 +40,29 @@ const ActionModal = ({ tile, player, onClose }) => {
         <div className="action-modal">
             <h2>Action for {tile.name}</h2>
             <p>{renderActionDescription()}</p>
-            <button onClick={onClose}>Close</button>
+
+            {tile.tile_type === 'property' && !tile.property?.owner && (
+                <div>
+                    <button onClick={() => setSelectedAction('buy')}>Buy</button>
+                </div>
+            )}
+
+            {tile.tile_type === 'property' && tile.property?.owner && tile.property.owner !== player.name && (
+                <div>
+                    <button onClick={() => setSelectedAction('payRent')}>Pay Rent</button>
+                </div>
+            )}
+
+            <div>
+                <button onClick={() => setSelectedAction('mortgage')}>Mortgage</button>
+            </div>
+
+            <div className="action-buttons">
+                <button onClick={handleAction} disabled={!selectedAction}>
+                    Confirm
+                </button>
+                <button onClick={onClose}>Close</button>
+            </div>
         </div>
     );
 };
