@@ -5,9 +5,17 @@ const ActionModal = ({ tile, player, onClose }) => {
     const renderActionDescription = () => {
         switch (tile.tile_type) {
             case 'property':
-                return `You can buy ${tile.name} for $${tile.property?.price}.`;
+                if (tile.property && tile.property.price !== undefined) {
+                    return `You can buy ${tile.name} for $${tile.property.price}.`;
+                } else {
+                    return `Property information is unavailable for ${tile.name}.`;
+                }
             case 'mortgage':
-                return `You can mortgage ${tile.name} for $${tile.property?.mortgageValue}.`;
+                if (tile.property && tile.property.mortgageValue !== undefined) {
+                    return `You can mortgage ${tile.name} for $${tile.property.mortgageValue}.`;
+                } else {
+                    return `Mortgage information is unavailable for ${tile.name}.`;
+                }
             case 'chance':
                 return `Draw a chance card.`;
             case 'community':

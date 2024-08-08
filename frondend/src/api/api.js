@@ -11,7 +11,14 @@ const api = axios.create({
 export const fetchBoard = async () => {
     try {
         const response = await api.get('/api/tiles/');
-        return response.data;
+        const boardData = response.data.map(tile => ({
+            ...tile,
+            property: {
+                price: tile.price, // Ensure the price is correctly mapped
+                mortgageValue: tile.mortgage_value, // Ensure the mortgage value is correctly mapped
+            }
+        }));
+        return boardData;
     } catch (error) {
         console.error('Fetch board data error:', error);
         throw error;
@@ -105,7 +112,6 @@ export const getPlayerInfo = async (playerId) => {
         throw error;
     }
 };
-
 
 // Export the configured axios instance for direct use in components
 export default api;

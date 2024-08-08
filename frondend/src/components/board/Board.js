@@ -15,12 +15,12 @@ import avatar6 from '../../assets/avatars/avatar6.png';
 import './Board.css';
 
 const initialPlayers = [
-    { id: 1, name: 'Player 1', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar1 },
-    { id: 2, name: 'Player 2', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar2 },
-    { id: 3, name: 'Player 3', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar3 },
-    { id: 4, name: 'Player 4', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar4 },
-    { id: 5, name: 'Player 5', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar5 },
-    { id: 6, name: 'Player 6', balance: 1500, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar6 },
+    { id: 1, name: 'Player 1', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar1 },
+    { id: 2, name: 'Player 2', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar2 },
+    { id: 3, name: 'Player 3', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar3 },
+    { id: 4, name: 'Player 4', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar4 },
+    { id: 5, name: 'Player 5', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar5 },
+    { id: 6, name: 'Player 6', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar6 },
 ];
 
 const Board = () => {
@@ -77,6 +77,7 @@ const Board = () => {
         const newPositions = [...playerPositions];
         newPositions[currentPlayer] = (newPositions[currentPlayer] + totalRoll) % boardTiles.length;
         setPlayerPositions(newPositions);
+        handleTileAction(boardTiles[newPositions[currentPlayer]]);
         setCurrentPlayer((currentPlayer + 1) % players.length);
     };
 
@@ -109,7 +110,7 @@ const Board = () => {
             </div>
             <div className="players-info">
                 {players.map((player, index) => (
-                    <PlayerInfo key={player.id} player={player} position={playerPositions[index]} />
+                    <PlayerInfo key={player.id} playerId={player.id} />
                 ))}
             </div>
             <div className="board">
