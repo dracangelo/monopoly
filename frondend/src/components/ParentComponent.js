@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayerInfo from './player/PlayerInfo';
-import { PlayerProvider, usePlayer } from './PlayerContext';
 
 const ParentComponent = () => {
-    return (
-        <PlayerProvider>
-            <PlayerInformation />
-        </PlayerProvider>
-    );
-};
+    const [playerId, setPlayerId] = useState(null);
 
-const PlayerInformation = () => {
-    const { playerId } = usePlayer();
+    useEffect(() => {
+        // Simulating fetching the playerId
+        const fetchPlayerId = () => {
+            // Replace this logic with actual playerId fetching logic
+            const id = 1;
+            console.log('Setting playerId:', id); // Debug log
+            setPlayerId(id);
+        };
+
+        fetchPlayerId();
+    }, []);
 
     return (
         <div>
