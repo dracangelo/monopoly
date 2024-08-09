@@ -6,28 +6,13 @@ import StockCard from '../actions/StockCard';
 import DiceRoller from '../Dice/DiceRoller';
 import Tile from './Tile';
 import PlayerIcon from './PlayerIcon';
-import avatar1 from '../../assets/avatars/avatar1.png';
-import avatar2 from '../../assets/avatars/avatar2.png';
-import avatar3 from '../../assets/avatars/avatar3.png';
-import avatar4 from '../../assets/avatars/avatar4.png';
-import avatar5 from '../../assets/avatars/avatar5.png';
-import avatar6 from '../../assets/avatars/avatar6.png';
 import './Board.css';
-
-const initialPlayers = [
-    { id: 1, name: 'Player 1', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar1 },
-    { id: 2, name: 'Player 2', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar2 },
-    { id: 3, name: 'Player 3', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar3 },
-    { id: 4, name: 'Player 4', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar4 },
-    { id: 5, name: 'Player 5', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar5 },
-    { id: 6, name: 'Player 6', balance: 7500000, properties: [], hotels: 0, mortgagedProperties: [], avatar: avatar6 },
-];
 
 const Board = () => {
     const [boardTiles, setBoardTiles] = useState([]);
-    const [players, setPlayers] = useState(initialPlayers);
+    const [players, setPlayers] = useState([]);
     const [bankBalance, setBankBalance] = useState(0);
-    const [playerPositions, setPlayerPositions] = useState([0, 0, 0, 0, 0, 0]);
+    const [playerPositions, setPlayerPositions] = useState([]);
     const [currentPlayer, setCurrentPlayer] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [currentTile, setCurrentTile] = useState(null);
@@ -39,25 +24,9 @@ const Board = () => {
         const getBoardData = async () => {
             try {
                 const data = await fetchBoard();
-
-                // Ensure all property tiles have a property object with default values
-                const updatedTiles = data.map(tile => {
-                    if (tile.tile_type === 'property' && !tile.property) {
-                        tile.property = {
-                            owner: null,
-                            price: 0,
-                            rent: 0,
-                            houses: 0,
-                            hotel: false,
-                            color_group: '',
-                            mortgageValue: 0,
-                            isMortgaged: false
-                        };
-                    }
-                    return tile;
-                });
-
-                setBoardTiles(updatedTiles.filter(tile => tile.id >= 0 && tile.id < 40));
+                const filteredTiles = filterTilesById(data);
+                const systematicTiles = createSystematicBoard(filteredTiles);
+                setBoardTiles(systematicTiles);
             } catch (error) {
                 setError('Error fetching board data');
                 console.error('Error fetching board data:', error);
@@ -70,6 +39,7 @@ const Board = () => {
             try {
                 const data = await fetchPlayers();
                 setPlayers(data);
+                setPlayerPositions(new Array(data.length).fill(0));
             } catch (error) {
                 setError('Error fetching players data');
                 console.error('Error fetching players data:', error);
@@ -90,6 +60,31 @@ const Board = () => {
         getPlayersData();
         getBankBalance();
     }, []);
+
+    const filterTilesById = (tiles) => {
+        return tiles.filter(tile => tile.id >= 0 && tile.id <= 39);
+    };
+
+    const createSystematicBoard = (tiles) => {
+        const cornerTiles = tiles.filter(tile => ['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
+        const otherTiles = tiles.filter(tile => !['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
+        
+        const systematicTiles = [
+            cornerTiles.find(tile => tile.name.toLowerCase() === 'go'),
+            ...otherTiles.slice(0, 9),
+            cornerTiles.find(tile => tile.name.toLowerCase() === 'jail'),
+            ...otherTiles.slice(9, 19),
+            cornerTiles.find(tile => tile.name.toLowerCase() === 'free parking'),
+            ...otherTiles.slice(19, 29),
+            cornerTiles.find(tile => tile.name.toLowerCase() === 'go to jail'),
+            ...otherTiles.slice(29)
+        ];
+
+        return systematicTiles.map((tile, index) => ({
+            ...tile,
+            position: index
+        }));
+    };
 
     const handleRoll = (totalRoll) => {
         const newPositions = [...playerPositions];
@@ -161,13 +156,14 @@ const Board = () => {
         const player = updatedPlayers[currentPlayer];
 
         if (tile.property && tile.property.owner === player.name && !tile.property.isMortgaged) {
-            player.balance += tile.property.mortgageValue;
+            const mortgageValue = tile.property.mortgageValue;
+            player.balance += mortgageValue;
             tile.property.isMortgaged = true;
             setPlayers(updatedPlayers);
+            closeModal();
         } else {
-            console.error('Cannot mortgage property');
+            console.error('Cannot mortgage this property');
         }
-        closeModal();
     };
 
     if (loading) {
@@ -195,7 +191,7 @@ const Board = () => {
                         {...tile}
                         position={index}
                         onAction={handleTileAction}
-                        className={`tile position-${index}`}
+                        className={`tile position-${index} ${tile.tile_type}`}
                     />
                 ))}
                 {players.map((player, index) => (

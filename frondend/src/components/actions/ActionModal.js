@@ -10,7 +10,8 @@ const ActionModal = ({ tile, player, onClose, onBuyProperty, onPayRent, onMortga
                 if (tile.property && tile.property.owner && tile.property.owner !== player.name) {
                     return `You must pay ${tile.property.owner} $${tile.property.rent} in rent for landing on ${tile.name}.`;
                 } else if (tile.property && !tile.property.owner) {
-                    return `You can buy ${tile.name} for $${tile.property.price}.`;
+                    const price = tile.property.price !== undefined ? `$${tile.property.price}` : 'an undefined amount';
+                    return `You can buy ${tile.name} for ${price}.`;
                 } else {
                     return `You already own ${tile.name}.`;
                 }

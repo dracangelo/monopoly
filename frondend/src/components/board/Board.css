@@ -2,11 +2,11 @@
     display: grid;
     grid-template-columns: repeat(11, 1fr);
     grid-template-rows: repeat(11, 1fr);
-    width: 90vmin;
-    height: 90vmin;
+    width: 80vmin;
+    height: 80vmin;
     margin: 2rem auto;
     border: 2px solid #000;
-    background-color: #C1E1C1;
+    background-color: #e6ffe6;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     font-family: 'Arial', sans-serif;
     position: relative; /* Added for player token positioning */
@@ -22,6 +22,13 @@
     text-align: center;
     font-size: 0.7vmin;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
 }
 
 .tile .name {
@@ -101,33 +108,34 @@
 
 /* Special tiles */
 .chance, .community-chest {
-    background-color: #FFA07A;
+    background-color: #ff9999;
 }
 
 .railroad {
-    background-color: #000000;
-    color: #FFFFFF;
+    background-color: #cccccc;
+    color: #000;
 }
 
 .utility {
-    background-color: #C0C0C0;
+    background-color: #99ff99;
 }
 
 .tax {
-    background-color: #FF6347;
+    background-color: #ff6666;
 }
 
 .free-parking, .go-to-jail, .jail, .go {
-    background-color: #FFFFFF;
+    background-color: #ffd700;
+    font-weight: bold;
 }
 
 /* Player token */
 .player {
-    width: 1.5vmin;
-    height: 1.5vmin;
+    width: 3vmin;
+    height: 3vmin;
     border-radius: 50%;
     position: absolute;
-    transition: all 0.3s ease; /* Smooth transition for movement */
+    transition: all 0.5s ease; /* Smooth transition for movement */
 }
 
 .player-1 { background-color: #e74c3c; }
