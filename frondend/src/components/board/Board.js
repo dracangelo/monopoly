@@ -24,8 +24,7 @@ const Board = () => {
         const getBoardData = async () => {
             try {
                 const data = await fetchBoard();
-                const filteredTiles = filterTilesById(data);
-                const systematicTiles = createSystematicBoard(filteredTiles);
+                const systematicTiles = createSystematicBoard(data);
                 setBoardTiles(systematicTiles);
             } catch (error) {
                 setError('Error fetching board data');
@@ -61,13 +60,12 @@ const Board = () => {
         getBankBalance();
     }, []);
 
-    const filterTilesById = (tiles) => {
-        return tiles.filter(tile => tile.id >= 0 && tile.id <= 39);
-    };
-
     const createSystematicBoard = (tiles) => {
-        const cornerTiles = tiles.filter(tile => ['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
-        const otherTiles = tiles.filter(tile => !['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
+        // Ensure only tiles with ID 0-39 are included
+        const validTiles = tiles.filter(tile => tile.id >= 0 && tile.id <= 39);
+        
+        const cornerTiles = validTiles.filter(tile => ['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
+        const otherTiles = validTiles.filter(tile => !['go', 'jail', 'free parking', 'go to jail'].includes(tile.name.toLowerCase()));
         
         const systematicTiles = [
             cornerTiles.find(tile => tile.name.toLowerCase() === 'go'),
@@ -174,50 +172,52 @@ const Board = () => {
         return <div>Error: {error}</div>;
     }
 
-    return (
-        <div className="game-container">
-            <div className="bank-info">
-                <h3>Bank Balance: ${bankBalance}</h3>
-            </div>
-            <div className="players-info">
-                {players.map((player, index) => (
-                    <PlayerInfo key={player.id} playerId={player.id} />
-                ))}
-            </div>
-            <div className="board">
-                {boardTiles.map((tile, index) => (
-                    <Tile
-                        key={index}
-                        {...tile}
-                        position={index}
-                        onAction={handleTileAction}
-                        className={`tile position-${index} ${tile.tile_type}`}
-                    />
-                ))}
-                {players.map((player, index) => (
-                    <PlayerIcon 
-                        key={player.id} 
-                        player={player} 
-                        position={playerPositions[index]}
-                        playerNumber={index + 1}
-                    />
-                ))}
-            </div>
-            <DiceRoller currentPlayer={currentPlayer} setPlayerPositions={setPlayerPositions} onRoll={handleRoll} />
-            {showModal && (
-                <ActionModal
-                    tile={currentTile}
-                    player={players[currentPlayer]}
-                    onClose={closeModal}
-                    onBuyProperty={() => handleBuyProperty(currentTile)}
-                    onPayRent={() => handlePayRent(currentTile)}
-                    onMortgageProperty={() => handleMortgageProperty(currentTile)}
-                    openStockCard={openStockCard}
-                />
-            )}
-            {showStockCard && <StockCard onClose={closeModal} />}
+
+return (
+    <div className="game-container">
+        <div className="bank-info">
+            <h3>Bank Balance: ${bankBalance}</h3>
         </div>
-    );
+        <div className="players-info">
+            {players.map((player, index) => (
+                <PlayerInfo key={player.id} playerId={player.id} />
+            ))}
+        </div>
+        <div className="board">
+            {boardTiles.map((tile, index) => (
+                <Tile
+                    key={index}
+                    {...tile}
+                    position={index}
+                    onAction={handleTileAction}
+                    className={`tile position-${index} ${tile.tile_type}`}
+                />
+            ))}
+            {players.map((player, index) => (
+                <PlayerIcon 
+                    key={player.id} 
+                    player={player} 
+                    position={playerPositions[index]}
+                    playerNumber={index + 1}
+                />
+            ))}
+        </div>
+        <DiceRoller currentPlayer={currentPlayer} setPlayerPositions={setPlayerPositions} onRoll={handleRoll} />
+        {showModal && (
+            <ActionModal
+                tile={currentTile}
+                player={players[currentPlayer]}
+                onClose={closeModal}
+                onBuyProperty={() => handleBuyProperty(currentTile)}
+                onPayRent={() => handlePayRent(currentTile)}
+                onMortgageProperty={() => handleMortgageProperty(currentTile)}
+                openStockCard={openStockCard}
+            />
+        )}
+        {showStockCard && <StockCard onClose={closeModal} />}
+    </div>
+);
+
 };
 
 export default Board;

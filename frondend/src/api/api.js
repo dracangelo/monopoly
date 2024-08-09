@@ -14,9 +14,9 @@ export const fetchBoard = async () => {
         const boardData = response.data.map(tile => ({
             ...tile,
             property: {
-                price: tile.price, // Ensure the price is correctly mapped
-                mortgageValue: tile.mortgage_value, // Ensure the mortgage value is correctly mapped
-            }
+                price: tile.price !== undefined ? tile.price : 0, // Ensure the price is not undefined
+                mortgageValue: tile.mortgage_value || 0,
+            },
         }));
         return boardData;
     } catch (error) {
@@ -25,16 +25,28 @@ export const fetchBoard = async () => {
     }
 };
 
+
 // Function to fetch players
 export const fetchPlayers = async () => {
     try {
         const response = await api.get('/api/players/');
-        return response.data;
+        const playersData = response.data.map(player => ({
+            ...player,
+            properties: player.properties || [],
+            avatar: player.avatar || '', // Default to an empty string if no avatar
+            name: player.name || 'Unknown Player',
+            balance: player.balance || 0,
+            rentOwed: player.rentOwed || 0,
+            mortgage: player.mortgage || 0,
+            debts: player.debts || 0,
+        }));
+        return playersData;
     } catch (error) {
         console.error('Error fetching players:', error);
         throw error;
     }
 };
+
 
 // Function to fetch the bank balance
 export const fetchBank = async () => {

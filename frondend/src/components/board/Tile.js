@@ -9,7 +9,7 @@ const Tile = ({ name, position, tile_type = 'unknown', property, onAction }) => 
             {property && (
                 <div className="tile-property">
                     <div><strong>Owner:</strong> {property.owner ? property.owner : 'No owner'}</div>
-                    <div><strong>Price:</strong> ${property.price}</div>
+                    <div><strong>Price:</strong> ${property.price !== undefined ? property.price : 'N/A'}</div>
                     <div><strong>Rent:</strong> ${property.rent}</div>
                     <div><strong>Houses:</strong> {property.houses || 0}</div>
                     <div><strong>Hotel:</strong> {property.hotel ? 'Yes' : 'No'}</div>
