@@ -1,4 +1,5 @@
 import React from 'react';
+import './PlayerIcon.css';
 
 const PlayerIcon = ({ player, position, playerNumber }) => {
     const positionStyles = {
@@ -44,18 +45,22 @@ const PlayerIcon = ({ player, position, playerNumber }) => {
         39: { top: '86%', right: '5%' },
     };
 
+    const playerStyles = [
+        { width: '10px', height: '10px', borderRadius: '50%', border: '2px solid blue' },
+        { width: '15px', height: '15px', borderRadius: '10%', border: '2px solid green' },
+        { width: '15px', height: '15px', borderRadius: '25%', border: '2px solid red' },
+        { width: '15px', height: '15px', borderRadius: '5%', border: '2px solid yellow' },
+        { width: '20px', height: '20px', borderRadius: '10%', border: '2px solid orange' },
+        { width: '20px', height: '20px', borderRadius: '5%', border: '2px solid purple' },
+    ];
+
     const style = {
         ...positionStyles[position],
-        width: '40px', // Make the icons a fixed size for visibility
-        height: '40px',
-        backgroundColor: '#f1f1f1', // Fallback color if avatar is missing
-        backgroundImage: player.avatar ? `url(${player.avatar})` : null,
+        ...playerStyles[playerNumber - 1], // Use different styles for each player
+        backgroundImage: `url(${player.avatar})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        borderRadius: '50%', // Make it a circle
-        border: '2px solid black',
         zIndex: playerNumber,
-        position: 'absolute', // Ensure it's positioned correctly
     };
 
     return (
